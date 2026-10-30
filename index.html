@@ -145,6 +145,18 @@ nav button,.btn{background:linear-gradient(180deg,#ffffff,#d7dde8 45%,#aab4c8);c
 nav button.active,.btn.primary{background:linear-gradient(90deg,#ff5ea8,#7c5cff,#00e5ff,#f5b301);background-size:200% 100%;color:#0b0f1a;border-color:transparent;font-weight:800;box-shadow:0 8px 24px rgba(124,92,255,.35)}
 nav button:hover,.btn:hover{filter:brightness(1.08);transform:translateY(-1px)}
 #soundToggle{background:linear-gradient(135deg,#00e5ff,#7c5cff);color:#fff;border-color:transparent}
+
+/* Animations: Y2K/glass, lightweight, no heavy JS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes floatGlow{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+@keyframes shimmer{from{background-position:200% 0}to{background-position:-200% 0}}
+@keyframes pulseGlow{0%,100%{box-shadow:0 8px 24px rgba(124,92,255,.25)}50%{box-shadow:0 8px 32px rgba(255,94,168,.45)}}
+section{animation:fadeUp .6s ease both}
+section:nth-child(2){animation-delay:.08s}.card{transition:transform .25s ease,box-shadow .25s ease}
+.card:hover{transform:translateY(-4px) scale(1.01)}
+nav button.active,.btn.primary{background-size:200% 100%;animation:floatGlow 6s ease-in-out infinite,pulseGlow 3s ease-in-out infinite}
+h1{background-size:200% 100%;animation:floatGlow 8s ease-in-out infinite}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 <section style="margin-top:14px"><h2>AI News Analysis — Gold aur Pairs ke liye</h2>
 <p class="small"><b>Important:</b> Ye analysis rule-based hai, koi real AI model ya price prediction nahi hai. Ye batata hai ki news aam taur par kis pair ke liye positive / negative maani jaati hai, aur gold par kis taraf pressure ban sakta hai. Ye trading advice nahi hai, aur pump / dump ki guarantee nahi deta. Asli price actual data aane ke baad hi react karta hai.</p>
