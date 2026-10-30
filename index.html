@@ -36,6 +36,7 @@ footer{text-align:center;color:#9aa7c7;padding:20px}
 <button data-tab="journal" class="active" onclick="showTab('journal',this)">Journal</button>
 <button data-tab="analytics" onclick="showTab('analytics',this)">Analytics</button>
 <button data-tab="news" onclick="showTab('news',this)">Forex News</button>
+<button data-tab="chart" onclick="showTab('chart',this)">Live Chart</button>
 <button data-tab="tools" onclick="showTab('tools',this)">Tools &amp; Challenge</button>
 </nav>
 <main>
@@ -93,12 +94,9 @@ footer{text-align:center;color:#9aa7c7;padding:20px}
 <section><h2>Forex News — Economic Calendar</h2>
 <p class="small">Live calendar below is the TradingView Economic Calendar widget (USD / EUR / GBP, all importance levels). It works on a static site without a server. Gold has no separate calendar — watch USD events for XAUUSD.</p>
 <div style="display:grid;grid-template-columns:1fr;gap:14px" id="newsGrid">
-<div><p class="small">Calendar widget tab kholne par hi load hoga, taaki site lag na kare. <button class="btn" onclick="loadWidgets()">Load calendar widget</button></p>
+<div><p class="small">Calendar widget tab kholne par hi load hoga, taaki site lag na kare. <button class="btn" onclick="loadCalendar()">Load calendar widget</button></p>
 <div id="tvCalendar"></div></div>
-<div><h3>Live Gold Chart — XAUUSD (TradingView)</h3>
-<p class="small">Chart bhi tab kholne par hi load hoga, taaki site fast rahe. <button class="btn" onclick="loadWidgets()">Load live chart</button></p>
-<div id="tvChart"></div>
-<p class="small">Live chart TradingView se aata hai. Agar chart load na ho to internet / TradingView block check karo, ye site ka data nahi hai.</p></div>
+
 </div>
 <style>@media(min-width:900px){#newsGrid{grid-template-columns:1fr 1fr}}</style>
 <section style="margin-top:14px"><h2>AI News Analysis — Gold aur Pairs ke liye</h2>
@@ -116,6 +114,12 @@ footer{text-align:center;color:#9aa7c7;padding:20px}
 <button class="btn" onclick="loadNews(true)" style="margin-left:8px">Refresh (fresh feed)</button>
 <p><a href="https://www.forexfactory.com/calendar" target="_blank" rel="noopener">Open Forex Factory Calendar (source)</a></p>
 <div id="news">Loading…</div></section>
+</div>
+<div id="tab-chart" style="display:none">
+<section><h2>Live Gold Chart — XAUUSD (TradingView)</h2>
+<p class="small">Chart sirf is tab ko kholne par load hoga, taaki baaki site fast rahe. <button class="btn" onclick="loadChart()">Load live chart</button></p>
+<div id="tvChart"></div>
+<p class="small">Live chart TradingView se aata hai. Agar chart load na ho to internet / TradingView block check karo, ye site ka data nahi hai.</p></section>
 </div>
 <div id="tab-tools" style="display:none">
 <section><h2>Risk / position-size calculator — live</h2>

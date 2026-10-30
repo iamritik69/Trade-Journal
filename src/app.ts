@@ -54,10 +54,11 @@ function dd(field: string): string { return ddValues[field] || ""; }
 
 /* ---------- Tabs ---------- */
 function showTab(id: string, btn: HTMLElement): void {
-  ["journal", "analytics", "news", "tools"].forEach((t) => { const el = document.getElementById("tab-" + t); if (el) el.style.display = t === id ? "block" : "none"; });
+  ["journal", "analytics", "news", "chart", "tools"].forEach((t) => { const el = document.getElementById("tab-" + t); if (el) el.style.display = t === id ? "block" : "none"; });
   document.querySelectorAll("nav button").forEach((b) => b.classList.remove("active")); btn.classList.add("active");
   if (id === "analytics") renderAnalytics();
-  if (id === "news") { loadWidgets(); loadNews(); }
+  if (id === "news") { loadCalendar(); loadNews(); }
+  if (id === "chart") loadChart();
 }
 (window as unknown as { showTab: typeof showTab }).showTab = showTab;
 
@@ -166,12 +167,16 @@ function injectWidget(containerId: string, src: string, config: Record<string, u
   const s = document.createElement("script"); s.type = "text/javascript"; s.src = src; s.async = true; s.textContent = JSON.stringify(config);
   el.querySelector(".tradingview-widget-container")?.appendChild(s);
 }
-function loadWidgets(): void {
-  if (widgetsLoaded) return; widgetsLoaded = true;
+function loadCalendar(): void {
   injectWidget("tvCalendar", "https://s3.tradingview.com/external-embedding/embed-widget-events.js", { colorTheme: "dark", isTransparent: false, locale: "en", countryFilter: "us,eu,gb", importanceFilter: "-1,0,1", currencyFilter: "USD,EUR,GBP", width: "100%", height: 600 });
+}
+function loadChart(): void {
   injectWidget("tvChart", "https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js", { autosize: true, symbol: "OANDA:XAUUSD", interval: "60", timezone: "Asia/Kolkata", theme: "dark", style: "1", locale: "en", hide_side_toolbar: false, allow_symbol_change: true, support_host: "https://www.tradingview.com" });
 }
+function loadWidgets(): void { loadCalendar(); loadChart(); }
 (window as unknown as { loadWidgets: () => void }).loadWidgets = loadWidgets;
+(window as unknown as { loadCalendar: () => void }).loadCalendar = loadCalendar;
+(window as unknown as { loadChart: () => void }).loadChart = loadChart;
 
 /* ---------- Forex News: parallel fetch with cache, never invented ---------- */
 async function fetchJson(url: string): Promise<unknown> { const ctrl = new AbortController(); const timer = setTimeout(() => ctrl.abort(), 5000); try { const res = await fetch(url, { signal: ctrl.signal }); if (!res.ok) throw new Error("feed failed"); return await res.json(); } finally { clearTimeout(timer); } }
