@@ -202,7 +202,7 @@ function renderNewsEvents(rawArr: Record<string, unknown>[]): void {
   ev.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
   analyzeNews(ev);
   const now = new Date();
-  $("news").innerHTML = ev.map((e) => { const d = new Date(new Date(e.date).getTime() + 5.5 * 3600 * 1000); return `<p><b>${d.toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}</b> • ${esc(e.currency)} • ${esc(e.impact)} • ${esc(e.title)} • Forecast: ${esc(e.forecast || "—")} • Previous: ${esc(e.previous || "—")} ${d < now ? '<span class="small">(past)</span>' : ""}</p>`; }).join("") || "<p>No events match this filter this week.</p>";
+  $("news").innerHTML = ev.map((e) => { const d = new Date(e.date); return `<p><b>${d.toLocaleString("en-IN", { timeZone: "Asia/Kolkata", day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit", hour12: true })} IST</b> • ${esc(e.currency)} • ${esc(e.impact)} • ${esc(e.title)} • Forecast: ${esc(e.forecast || "—")} • Previous: ${esc(e.previous || "—")} ${d < now ? '<span class="small">(past)</span>' : ""}</p>`; }).join("") || "<p>No events match this filter this week.</p>";
 }
 (window as unknown as { loadNews: (force?: boolean) => Promise<void> }).loadNews = loadNews;
 function goldBiasFor(e: NewsEvent): string {

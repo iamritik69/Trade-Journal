@@ -94,7 +94,7 @@ footer{text-align:center;color:#9aa7c7;padding:20px}
 <section><h2>Forex News — Economic Calendar</h2>
 <p class="small">Live calendar below is the TradingView Economic Calendar widget (USD / EUR / GBP, all importance levels). It works on a static site without a server. Gold has no separate calendar — watch USD events for XAUUSD.</p>
 <div style="display:grid;grid-template-columns:1fr;gap:14px" id="newsGrid">
-<div><p class="small">Calendar widget tab kholne par hi load hoga, taaki site lag na kare. <button class="btn" onclick="loadCalendar()">Load calendar widget</button></p>
+<div><p class="small">Calendar widget tab kholne par hi load hoga, taaki site lag na kare. Widget tumhare phone ke time zone me time dikhata hai, phone IST (Asia/Kolkata) par set ho to usme bhi IST time dikhega. <button class="btn" onclick="loadCalendar()">Load calendar widget</button></p>
 <div id="tvCalendar"></div></div>
 
 </div>
@@ -109,7 +109,7 @@ footer{text-align:center;color:#9aa7c7;padding:20px}
 <div id="manualNewsOut" style="margin-top:10px"></div>
 </section>
 <h3 style="margin-top:20px">Forex Factory list (backup)</h3>
-<p class="small">Backup list below tries the Forex Factory / Faireconomy feed directly and via proxies. That feed blocks browser access (no CORS header), so this list may fail even when the widget above works. No events are invented here.</p>
+<p class="small">Backup list below tries the Forex Factory / Faireconomy feed directly and via proxies. Is list ke saare time IST (Asia/Kolkata) me dikhenge, har time ke aage "IST" likha hoga. That feed blocks browser access (no CORS header), so this list may fail even when the widget above works. No events are invented here.</p>
 <label><input type="checkbox" id="highOnly" onchange="loadNews()"> High-impact only</label>
 <button class="btn" onclick="loadNews(true)" style="margin-left:8px">Refresh (fresh feed)</button>
 <p><a href="https://www.forexfactory.com/calendar" target="_blank" rel="noopener">Open Forex Factory Calendar (source)</a></p>
