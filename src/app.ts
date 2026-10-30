@@ -57,7 +57,7 @@ function showTab(id: string, btn: HTMLElement): void {
   ["journal", "analytics", "news", "tools"].forEach((t) => { const el = document.getElementById("tab-" + t); if (el) el.style.display = t === id ? "block" : "none"; });
   document.querySelectorAll("nav button").forEach((b) => b.classList.remove("active")); btn.classList.add("active");
   if (id === "analytics") renderAnalytics();
-  if (id === "news") loadNews();
+  if (id === "news") { loadWidgets(); loadNews(); }
 }
 (window as unknown as { showTab: typeof showTab }).showTab = showTab;
 
@@ -158,26 +158,48 @@ async function sha(s: string): Promise<string> { const b = await crypto.subtle.d
 (window as unknown as { unlock: () => Promise<void> }).unlock = async () => { if (await sha(($("pinIn") as HTMLInputElement).value) === localStorage.getItem("ritik_pin_hash")) $("lockScreen").style.display = "none"; else alert("Wrong PIN."); };
 if (localStorage.getItem("ritik_pin_hash")) $("lockScreen").style.display = "block";
 
-/* ---------- Forex News: direct, then CORS proxies, never invented ---------- */
-async function fetchJson(url: string): Promise<unknown> { const ctrl = new AbortController(); const timer = setTimeout(() => ctrl.abort(), 8000); try { const res = await fetch(url, { signal: ctrl.signal }); if (!res.ok) throw new Error("feed failed"); return await res.json(); } finally { clearTimeout(timer); } }
-async function loadNews(): Promise<void> {
-  const box = $("news"); box.textContent = "Loading…";
+/* ---------- Lazy TradingView widgets (fixes lag: nothing heavy loads until News tab) ---------- */
+let widgetsLoaded = false;
+function injectWidget(containerId: string, src: string, config: Record<string, unknown>): void {
+  const el = document.getElementById(containerId); if (!el || el.dataset.loaded) return; el.dataset.loaded = "1";
+  el.innerHTML = `<div class="tradingview-widget-container"><div class="tradingview-widget-container__widget" style="height:600px"></div></div>`;
+  const s = document.createElement("script"); s.type = "text/javascript"; s.src = src; s.async = true; s.textContent = JSON.stringify(config);
+  el.querySelector(".tradingview-widget-container")?.appendChild(s);
+}
+function loadWidgets(): void {
+  if (widgetsLoaded) return; widgetsLoaded = true;
+  injectWidget("tvCalendar", "https://s3.tradingview.com/external-embedding/embed-widget-events.js", { colorTheme: "dark", isTransparent: false, locale: "en", countryFilter: "us,eu,gb", importanceFilter: "-1,0,1", currencyFilter: "USD,EUR,GBP", width: "100%", height: 600 });
+  injectWidget("tvChart", "https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js", { autosize: true, symbol: "OANDA:XAUUSD", interval: "60", timezone: "Asia/Kolkata", theme: "dark", style: "1", locale: "en", hide_side_toolbar: false, allow_symbol_change: true, support_host: "https://www.tradingview.com" });
+}
+(window as unknown as { loadWidgets: () => void }).loadWidgets = loadWidgets;
+
+/* ---------- Forex News: parallel fetch with cache, never invented ---------- */
+async function fetchJson(url: string): Promise<unknown> { const ctrl = new AbortController(); const timer = setTimeout(() => ctrl.abort(), 5000); try { const res = await fetch(url, { signal: ctrl.signal }); if (!res.ok) throw new Error("feed failed"); return await res.json(); } finally { clearTimeout(timer); } }
+async function loadNews(force = false): Promise<void> {
+  const box = $("news");
+  if (!force) { try { const cached = JSON.parse(localStorage.getItem("ritik_news_cache") || "null"); if (cached && Date.now() - cached.at < 3600000 && Array.isArray(cached.events)) { renderNewsEvents(cached.events); return; } } catch { /* ignore cache */ } }
+  box.textContent = "Loading… (fast mode: sab sources ek saath try ho rahe hain)";
   const urls = [
     "https://nfs.faireconomy.media/ff_calendar_thisweek.json",
     "https://api.codetabs.com/v1/proxy?quest=https://nfs.faireconomy.media/ff_calendar_thisweek.json",
     "https://api.allorigins.win/raw?url=" + encodeURIComponent("https://nfs.faireconomy.media/ff_calendar_thisweek.json"),
   ];
   let raw: unknown = null, lastErr = "";
-  for (const u of urls) { try { raw = await fetchJson(u); break; } catch (e) { lastErr = String(e); } }
+  const results = await Promise.allSettled(urls.map((u) => fetchJson(u)));
+  for (const r of results) { if (r.status === "fulfilled" && Array.isArray(r.value)) { raw = r.value; break; } else if (r.status === "rejected") lastErr = String(r.reason); }
   if (!Array.isArray(raw)) { box.innerHTML = `<p>Live calendar feed could not be loaded in this browser (${esc(lastErr)}). Upar TradingView widget se live calendar dekho, aur neeche Manual News Checker se kisi bhi event ka asar check karo. No events have been invented here.</p>`; $("aiNews").innerHTML = "<p>Feed load nahi hui, isliye auto-analysis khaali hai. Upar TradingView calendar dekho, ya Manual News Checker me event type aur actual vs forecast chuno, wahan Gold aur pairs ka asar milega.</p>"; return; }
-  let ev = (raw as Record<string, unknown>[]).map((e) => ({ title: String(e.title || ""), currency: String(e.country || e.currency || ""), date: String(e.date || ""), impact: String(e.impact || ""), forecast: String(e.forecast || ""), previous: String(e.previous || "") })).filter((e) => ["USD", "EUR", "GBP"].includes(e.currency));
+  try { localStorage.setItem("ritik_news_cache", JSON.stringify({ at: Date.now(), events: raw })); } catch { /* cache optional */ }
+  renderNewsEvents(raw as Record<string, unknown>[]);
+}
+function renderNewsEvents(rawArr: Record<string, unknown>[]): void {
+  let ev = rawArr.map((e) => ({ title: String(e.title || ""), currency: String(e.country || e.currency || ""), date: String(e.date || ""), impact: String(e.impact || ""), forecast: String(e.forecast || ""), previous: String(e.previous || "") })).filter((e) => ["USD", "EUR", "GBP"].includes(e.currency));
   if (($("highOnly") as HTMLInputElement).checked) ev = ev.filter((e) => e.impact === "High");
   ev.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
   analyzeNews(ev);
   const now = new Date();
-  box.innerHTML = ev.map((e) => { const d = new Date(new Date(e.date).getTime() + 5.5 * 3600 * 1000); return `<p><b>${d.toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}</b> • ${esc(e.currency)} • ${esc(e.impact)} • ${esc(e.title)} • Forecast: ${esc(e.forecast || "—")} • Previous: ${esc(e.previous || "—")} ${d < now ? '<span class="small">(past)</span>' : ""}</p>`; }).join("") || "<p>No events match this filter this week.</p>";
+  $("news").innerHTML = ev.map((e) => { const d = new Date(new Date(e.date).getTime() + 5.5 * 3600 * 1000); return `<p><b>${d.toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}</b> • ${esc(e.currency)} • ${esc(e.impact)} • ${esc(e.title)} • Forecast: ${esc(e.forecast || "—")} • Previous: ${esc(e.previous || "—")} ${d < now ? '<span class="small">(past)</span>' : ""}</p>`; }).join("") || "<p>No events match this filter this week.</p>";
 }
-(window as unknown as { loadNews: () => Promise<void> }).loadNews = loadNews;
+(window as unknown as { loadNews: (force?: boolean) => Promise<void> }).loadNews = loadNews;
 function goldBiasFor(e: NewsEvent): string {
   if (e.currency === "USD") return "Gold ke liye pressure: USD strong = Gold par neeche ka pressure (bearish), USD weak = Gold ko support (bullish).";
   if (e.currency === "EUR") return "EURUSD ke liye main event hai, Gold par seedha asar kam hai.";
