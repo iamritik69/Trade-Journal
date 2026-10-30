@@ -194,7 +194,7 @@ body{background-image:radial-gradient(circle at 20% 20%,rgba(74,222,128,.18),tra
 </section>
 <h3 style="margin-top:20px">Forex Factory list (backup)</h3>
 <p class="small">Backup list below tries the Forex Factory / Faireconomy feed directly and via proxies. Is list ke saare time IST (Asia/Kolkata) me, 12-hour format me dikhenge, jaise 6:00 PM IST — railway wala 24-hour format (18:00) nahi hoga. That feed blocks browser access (no CORS header), so this list may fail even when the widget above works. No events are invented here.</p>
-<label><input type="checkbox" id="highOnly" checked onchange="loadNews()"> Red folder only (High-impact only)</label>
+<label><input type="checkbox" id="highOnly" checked onchange="loadNews()"> Gold priority: Red + Orange folder only (High + Medium, USD pehle)</label>
 <button class="btn" onclick="loadNews(true)" style="margin-left:8px">Refresh (fresh feed)</button>
 <p><a href="https://www.forexfactory.com/calendar" target="_blank" rel="noopener">Open Forex Factory Calendar (source)</a></p>
 <div id="news">Loading…</div></section>
@@ -223,7 +223,7 @@ body{background-image:radial-gradient(circle at 20% 20%,rgba(74,222,128,.18),tra
 <script src="https://unpkg.com/lightweight-charts@4.2.0/dist/lightweight-charts.standalone.production.js"></script>
 <script src="live-gold.js"></script>
 <script>function glassPriceFetch(){fetch('https://api.gold-api.com/price/XAU').then(function(r){return r.json()}).then(function(j){var e=document.getElementById('glassPrice');if(e)e.innerHTML='💰 Live Gold: $'+Number(j.price).toFixed(2)+' • '+new Date(j.updatedAt||Date.now()).toLocaleString('en-IN',{timeZone:'Asia/Kolkata',hour12:true})+' IST';}).catch(function(){});}glassPriceFetch();setInterval(glassPriceFetch,30000);</script>
-<script src="app.js?v=invest1"></script>
+<script src="app.js?v=goldpri1"></script>
 
 <script>
 // iOS-style click sound, synthesized in-browser (no Apple audio file copied).

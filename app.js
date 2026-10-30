@@ -302,7 +302,7 @@ function injectWidget(containerId, src, config) {
     el.querySelector(".tradingview-widget-container")?.appendChild(s);
 }
 function loadCalendar() {
-    injectWidget("tvCalendar", "https://s3.tradingview.com/external-embedding/embed-widget-events.js", { colorTheme: "dark", isTransparent: false, locale: "en_US", countryFilter: "us,eu,gb", importanceFilter: "1", currencyFilter: "USD,EUR,GBP", width: "100%", height: 600 });
+    injectWidget("tvCalendar", "https://s3.tradingview.com/external-embedding/embed-widget-events.js", { colorTheme: "dark", isTransparent: false, locale: "en_US", countryFilter: "us,eu,gb", importanceFilter: "1,0", currencyFilter: "USD,EUR,GBP", width: "100%", height: 600 });
 }
 function loadChart() {
     injectWidget("tvChart", "https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js", { autosize: true, symbol: "OANDA:XAUUSD", interval: "60", timezone: "Asia/Kolkata", theme: "dark", style: "1", locale: "en", hide_side_toolbar: false, hide_top_toolbar: false, allow_symbol_change: true, withdateranges: true, details: true, studies: ["STD;EMA"], studies_overrides: { "STD;EMA.length": 132 }, support_host: "https://www.tradingview.com" });
@@ -383,8 +383,9 @@ function formatIST12(dateStr) {
 function renderNewsEvents(rawArr) {
     let ev = rawArr.map((e) => ({ title: String(e.title || ""), currency: String(e.country || e.currency || ""), date: String(e.date || ""), impact: String(e.impact || ""), forecast: String(e.forecast || ""), previous: String(e.previous || "") })).filter((e) => ["USD", "EUR", "GBP"].includes(e.currency));
     if ($("highOnly").checked)
-        ev = ev.filter((e) => e.impact === "High");
-    ev.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+        ev = ev.filter((e) => e.impact === "High" || e.impact === "Medium");
+    const goldRank = (c) => c === "USD" ? 0 : c === "EUR" ? 1 : 2;
+    ev.sort((a, b) => goldRank(a.currency) - goldRank(b.currency) || new Date(a.date).getTime() - new Date(b.date).getTime());
     analyzeNews(ev);
     const now = new Date();
     $("news").innerHTML = ev.map((e) => { const d = new Date(e.date); return `<p><b>${formatIST12(e.date)}</b> • ${esc(e.currency)} • ${esc(e.impact)} • ${esc(e.title)} • Forecast: ${esc(e.forecast || "—")} • Previous: ${esc(e.previous || "—")} ${d < now ? '<span class="small">(past)</span>' : ""}</p>`; }).join("") || "<p>No events match this filter this week.</p>";
