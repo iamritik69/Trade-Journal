@@ -106,6 +106,24 @@ function renderLeaderboard() {
     $("leaderboard").innerHTML = top.map((t, i) => `<p><b>#${i + 1}</b> ${esc(t.date)} • ${esc(t.pair)} ${esc(t.dir)} • <b class="${t.r >= 0 ? "win" : "loss"}">${t.r}R</b> • Score: ${tradeScore(t)}</p>`).join("") || "<p>No trades yet.</p>";
 }
 /* glass strip: live gold price on every open */
+async function loadInvestingNews() {
+    const box = $("investingNews");
+    if (!box)
+        return;
+    try {
+        const res = await fetch("investing-news.json");
+        if (!res.ok)
+            throw new Error("feed failed");
+        const items = await res.json();
+        const gold = (x) => /gold|xau|safe-haven|safe haven/i.test(x) ? 0 : /dollar|usd/i.test(x) ? 1 : 2;
+        items.sort((a, b) => gold(a.title) - gold(b.title));
+        box.innerHTML = items.map((it) => `<p><b>${esc(it.pubDate || "")}</b> • <a href="${esc(it.link)}" target="_blank" rel="noopener" style="color:#fff">${esc(it.title)}</a></p>`).join("");
+    }
+    catch {
+        box.innerHTML = "<p>Headlines load nahi hui, Investing.com ka button upar se use karo.</p>";
+    }
+}
+window.loadInvestingNews = loadInvestingNews;
 function showTab(id, btn) {
     ["dashboard", "journal", "analytics", "news", "tools"].forEach((t) => { const el = document.getElementById("tab-" + t); if (el)
         el.style.display = t === id ? "block" : "none"; });
@@ -122,6 +140,7 @@ function showTab(id, btn) {
     if (id === "news") {
         loadCalendar();
         loadNews();
+        loadInvestingNews();
     }
     if (id === "chart")
         loadChart();
