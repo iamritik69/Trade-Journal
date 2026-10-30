@@ -43,6 +43,7 @@ section::before{content:"";position:absolute;left:18px;right:18px;top:0;height:2
 nav button.active,.btn.primary{background:linear-gradient(135deg,#e8edf5,#f5b301 55%,#ff5ea8);box-shadow:0 8px 24px rgba(255,94,168,.30)}
 nav{border-radius:28px}
 #glassPrice{background:linear-gradient(90deg,rgba(255,255,255,.12),rgba(255,94,168,.12),rgba(0,229,255,.12))!important}
+.badge-sell{background:#7f1d1d;color:#fff;padding:4px 10px;border-radius:999px;font-size:12px;white-space:nowrap}.badge-buy{background:#14532d;color:#fff;padding:4px 10px;border-radius:999px;font-size:12px;white-space:nowrap}
 </style></head><body>
 <header><h1>RITIK <span>/</span> TRADE JOURNAL</h1><p id="glassPrice" class="small" style="background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:8px 14px;display:inline-block">💰 Live Gold: loading...</p><p>RITIK • DISCIPLINE IS THE ENGINE • Times shown in IST (UTC+05:30, Kolkata) • TypeScript build</p><button class="btn" id="soundToggle" onclick="toggleClickSound()">🔊 Click Sound: On</button> <button class="btn" id="sideToggle" onclick="document.body.classList.toggle('sidebar-collapsed')">☰ Sidebar slide karo / wapas lao</button></header>
 <nav>
@@ -180,7 +181,7 @@ body{background-image:radial-gradient(circle at 20% 20%,rgba(74,222,128,.18),tra
 @keyframes orbFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-30px)}}
 .card{transform-style:preserve-3d;transition:transform .2s ease,box-shadow .2s ease}
 </style>
-<section style="margin-top:14px"><h2>AI News Analysis — Gold aur Pairs ke liye</h2>
+<section style="margin-top:14px"><h2>🤖 AI NEWS ANALYSIS — Gold aur Pairs ke liye</h2><p class="small">Real-time Analysis • AI Powered (rule-based) • Trade with Clarity</p>
 <p class="small"><b>Important:</b> Ye analysis rule-based hai, koi real AI model ya price prediction nahi hai. Ye batata hai ki news aam taur par kis pair ke liye positive / negative maani jaati hai, aur gold par kis taraf pressure ban sakta hai. Ye trading advice nahi hai, aur pump / dump ki guarantee nahi deta. Asli price actual data aane ke baad hi react karta hai.</p>
 <div id="aiNews">News load hote hi analysis yahan aayega. Agar feed fail ho to neeche manual tool use karo.</div>
 <h3>Manual News Checker (feed na chale to bhi kaam karega)</h3>
@@ -220,7 +221,7 @@ body{background-image:radial-gradient(circle at 20% 20%,rgba(74,222,128,.18),tra
 <script src="https://unpkg.com/lightweight-charts@4.2.0/dist/lightweight-charts.standalone.production.js"></script>
 <script src="live-gold.js"></script>
 <script>function glassPriceFetch(){fetch('https://api.gold-api.com/price/XAU').then(function(r){return r.json()}).then(function(j){var e=document.getElementById('glassPrice');if(e)e.innerHTML='💰 Live Gold: $'+Number(j.price).toFixed(2)+' • '+new Date(j.updatedAt||Date.now()).toLocaleString('en-IN',{timeZone:'Asia/Kolkata',hour12:true})+' IST';}).catch(function(){});}glassPriceFetch();setInterval(glassPriceFetch,30000);</script>
-<script src="app.js?v=ddfix2"></script>
+<script src="app.js?v=newsai1"></script>
 
 <script>
 // iOS-style click sound, synthesized in-browser (no Apple audio file copied).

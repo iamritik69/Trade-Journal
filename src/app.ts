@@ -268,13 +268,26 @@ function analyzeNews(ev: NewsEvent[]): void {
   const eur = ev.filter((e) => e.currency === "EUR");
   const gbp = ev.filter((e) => e.currency === "GBP");
   const bias = usd.length >= 2 ? "Aaj / is week me zyada USD events hain, isliye Gold par USD ki taraf se pressure ban sakta hai. Ye direction ki guarantee nahi hai, actual number aane par hi price decide hoga." : "USD events kam hain, isliye Gold par news ka pressure is week me limited dikh raha hai.";
-  box.innerHTML = `<p><b>Summary:</b> Total events: ${ev.length} (High impact: ${high.length}, USD: ${usd.length}, EUR: ${eur.length}, GBP: ${gbp.length}). ${bias}</p>
-  <table><tr><th>Pair</th><th>News ka aam asar</th></tr>
-  <tr><td><b>XAUUSD (Gold)</b></td><td>USD strong news = Gold ke liye negative (dump pressure), USD weak news = Gold ke liye positive (pump support). EUR / GBP news ka Gold par seedha asar kam hota hai.</td></tr>
-  <tr><td><b>EURUSD</b></td><td>EUR strong = EURUSD positive, USD strong = EURUSD negative.</td></tr>
-  <tr><td><b>GBPUSD</b></td><td>GBP strong = GBPUSD positive, USD strong = GBPUSD negative.</td></tr>
-  <tr><td><b>USDJPY</b></td><td>USD strong = USDJPY positive (JPY ke against USD up).</td></tr></table>
-  <h3>Har event ka asar</h3>` + ev.slice(0, 30).map((e) => `<p><b>${esc(e.title)}</b> (${esc(e.currency)}, ${esc(e.impact)}) — ${goldBiasFor(e)} Forecast: ${esc(e.forecast || "—")}, Previous: ${esc(e.previous || "—")}.</p>`).join("");
+  const goldImpact = (e: NewsEvent): string => e.currency === "USD" ? "▼ Bearish" : "—";
+  const pairImpact = (e: NewsEvent): string => e.currency === "USD" ? "USD ▼" : e.currency === "EUR" ? "EURUSD ▼" : e.currency === "GBP" ? "GBPUSD ▼" : "—";
+  box.innerHTML = `<p class="small"><b>Disclaimer:</b> Ye rule-based analysis hai, koi real AI model ya price prediction nahi hai. Ye sirf educational purpose ke liye hai, financial advice nahi hai.</p>
+  <h3>SUMMARY</h3><div class="cards">
+  <div class="card"><span>Total Events</span><b>${ev.length}</b></div>
+  <div class="card"><span>High Impact</span><b>${high.length}</b></div>
+  <div class="card"><span>USD Events</span><b>${usd.length}</b></div>
+  <div class="card"><span>EUR Events</span><b>${eur.length}</b></div>
+  <div class="card"><span>GBP Events</span><b>${gbp.length}</b></div></div>
+  <p>${bias}</p>
+  <h3>PAIRS NEWS KA ASAR</h3><div style="overflow:auto"><table><tr><th>Pair</th><th>USD News</th><th>Currency News</th><th>Overall Impact</th><th>Reason (Short)</th></tr>
+  <tr><td><b>XAUUSD (Gold)</b></td><td>▼ Negative</td><td>▲ Positive</td><td><span class="badge-sell">▼ SELL Pressure</span></td><td>USD strong = Gold ke liye negative (dump pressure)</td></tr>
+  <tr><td><b>EURUSD</b></td><td>▲ Positive</td><td>▼ Negative</td><td><span class="badge-buy">▲ BUY Support</span></td><td>EUR strong = EURUSD positive, USD strong = EURUSD negative</td></tr>
+  <tr><td><b>GBPUSD</b></td><td>▲ Positive</td><td>▲ Positive</td><td><span class="badge-buy">▲ BUY Support</span></td><td>GBP strong = GBPUSD positive, USD strong = GBPUSD negative</td></tr>
+  <tr><td><b>USDJPY</b></td><td>▲ Positive</td><td>▼ Negative</td><td><span class="badge-buy">▲ BUY Support</span></td><td>USD strong = USDJPY positive (JPY ke against USD up)</td></tr></table></div>
+  <p class="small">Upar wale pair badges aam market rule se hain, prediction nahi. Actual move actual number aur market expectation par depend karta hai.</p>
+  <h3>HAR EVENT KA ASAR (DETAILED)</h3><div style="overflow:auto"><table><tr><th>#</th><th>Time (IST)</th><th>Event</th><th>Currency</th><th>Impact on Gold</th><th>Impact on Pair</th><th>Forecast</th><th>Previous</th></tr>
+  ${ev.slice(0, 30).map((e, i) => `<tr><td>${i + 1}</td><td>${formatIST12(e.date)}</td><td>${esc(e.title)}</td><td>${esc(e.currency)}</td><td>${goldImpact(e)}</td><td>${pairImpact(e)}</td><td>${esc(e.forecast || "—")}</td><td>${esc(e.previous || "—")}</td></tr>`).join("")}</table></div>
+  <h3>LATEST HIGH IMPACT EVENTS</h3>` + high.slice(0, 10).map((e) => `<p><b>${formatIST12(e.date)}</b> • ${esc(e.title)} • <span class="badge-sell">High</span></p>`).join("") + `
+  <p class="small"><b>IMPORTANT NOTE:</b> Ye analysis rule-based aur past data ke basis par hai, koi real-time prediction nahi hai. News ka actual impact number release hone par hi clear hoga. Ye sirf trading analysis ke liye educational purpose hai, financial advice nahi hai.</p>`;
 }
 (window as unknown as { manualNews: () => void }).manualNews = () => {
   const type = dd("evType"), beat = dd("evBeat");
