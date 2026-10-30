@@ -28,8 +28,7 @@ table{width:100%;border-collapse:collapse;font-size:14px}th,td{padding:9px;borde
 .dd-backdrop.open{display:block}
 .dd-sheet{display:none;z-index:50;background:#1c2742;border:1px solid #33456e;border-radius:20px;padding:8px;box-shadow:0 20px 50px rgba(0,0,0,.5)}
 .dd-sheet.open{display:block}
-@media(min-width:700px){.dd-sheet{position:absolute;left:0;right:0;top:calc(100% + 6px)}}
-@media(max-width:699px){.dd-sheet{position:fixed;left:12px;right:12px;bottom:12px;max-height:55vh;overflow:auto}}
+.dd-sheet{position:absolute;left:0;right:0;top:calc(100% + 6px);max-height:50vh;overflow:auto}
 .dd-opt{width:100%;display:flex;justify-content:space-between;padding:13px 12px;background:transparent;border:0;border-bottom:1px solid #2a3a5e;color:#fff;font-size:16px;cursor:pointer;text-align:left}.dd-opt.sel{color:#f5b301;font-weight:700}
 footer{text-align:center;color:#9aa7c7;padding:20px}
 @media(max-width:600px){h1{font-size:24px}.cards{grid-template-columns:repeat(2,1fr)}.row{grid-template-columns:1fr}main{padding:8px 10px 44px}section{padding:14px 12px;overflow-wrap:break-word}h2{font-size:20px;overflow-wrap:break-word}p,li,td{overflow-wrap:break-word;word-break:break-word}table{font-size:13px}}
@@ -74,7 +73,7 @@ nav{border-radius:28px}
 <label class="check"><input type="checkbox" id="c3"><span>Risk is within my limit (0.25–0.5% per trade)</span></label>
 <label class="check"><input type="checkbox" id="c4"><span>Stop-loss and outcome plan decided before entry</span></label>
 <p class="small">Checked items are saved with the next entry you add.</p></section>
-<section><h2>NAYI ENTRY</h2><form id="entryForm">
+<section><h2>New Entry</h2><form id="entryForm">
 <div class="row">
 <div><label>Date<input type="date" id="fDate" required></label></div>
 <div><label>Pair</label><div class="ios-dd" data-field="pair" data-options="XAUUSD,EURUSD,GBPUSD,USDJPY,GBPJPY,EURGBP" data-value="XAUUSD"></div></div>
@@ -221,7 +220,7 @@ body{background-image:radial-gradient(circle at 20% 20%,rgba(74,222,128,.18),tra
 <script src="https://unpkg.com/lightweight-charts@4.2.0/dist/lightweight-charts.standalone.production.js"></script>
 <script src="live-gold.js"></script>
 <script>function glassPriceFetch(){fetch('https://api.gold-api.com/price/XAU').then(function(r){return r.json()}).then(function(j){var e=document.getElementById('glassPrice');if(e)e.innerHTML='💰 Live Gold: $'+Number(j.price).toFixed(2)+' • '+new Date(j.updatedAt||Date.now()).toLocaleString('en-IN',{timeZone:'Asia/Kolkata',hour12:true})+' IST';}).catch(function(){});}glassPriceFetch();setInterval(glassPriceFetch,30000);</script>
-<script src="app.js?v=topfix1"></script>
+<script src="app.js?v=ddfix1"></script>
 
 <script>
 // iOS-style click sound, synthesized in-browser (no Apple audio file copied).

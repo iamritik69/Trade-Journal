@@ -48,7 +48,7 @@ function buildDropdowns(): void {
     };
     btn.addEventListener("click", (e) => { e.stopPropagation(); sheet.classList.contains("open") ? close() : open(); });
     backdrop.addEventListener("click", close);
-    renderBtn(); el.appendChild(btn); el.appendChild(backdrop); el.appendChild(sheet);
+    renderBtn(); el.appendChild(btn); document.body.appendChild(backdrop); el.appendChild(sheet);
   });
 }
 function dd(field: string): string { return ddValues[field] || ""; }

@@ -57,7 +57,7 @@ function buildDropdowns() {
         backdrop.addEventListener("click", close);
         renderBtn();
         el.appendChild(btn);
-        el.appendChild(backdrop);
+        document.body.appendChild(backdrop);
         el.appendChild(sheet);
     });
 }
