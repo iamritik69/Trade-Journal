@@ -6,6 +6,8 @@
 header{padding:22px 16px 6px;max-width:1100px;margin:auto}h1{margin:0;font-size:30px;letter-spacing:.4px}h1 span{color:#f5b301}header p{color:#9aa7c7;margin:8px 0}
 nav{max-width:1100px;margin:12px auto;padding:0 16px;display:flex;gap:8px;flex-wrap:wrap;position:sticky;top:0;z-index:20;background:#0b0f1acc;backdrop-filter:blur(12px);padding-top:10px;padding-bottom:10px}
 nav button,.btn{background:#1c2742;color:#fff;border:1px solid #33456e;border-radius:999px;padding:10px 16px;cursor:pointer;font-size:15px}
+@media(min-width:900px){nav{position:fixed;left:0;top:0;bottom:0;width:220px;max-width:220px;margin:0;flex-direction:column;flex-wrap:nowrap;padding:20px 14px;background:#101828;border-right:1px solid #2a3a5e}nav button{width:100%;text-align:left;border-radius:14px}header,main{margin-left:240px}main{max-width:900px}}
+@media(max-width:899px){nav{position:fixed;left:0;right:0;bottom:0;top:auto;max-width:none;margin:0;flex-wrap:nowrap;justify-content:space-around;padding:8px 6px;background:#101828f2;border-top:1px solid #2a3a5e;z-index:30}nav button{padding:8px 10px;font-size:13px;border-radius:12px}main{padding-bottom:90px}footer{padding-bottom:90px}}
 nav button.active,.btn.primary{background:#f5b301;color:#111;border-color:#f5b301;font-weight:700}
 main{max-width:1100px;margin:auto;padding:8px 16px 44px}
 .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
@@ -34,15 +36,22 @@ html,body{max-width:100%;overflow-x:hidden}section{overflow-wrap:break-word}
 </style></head><body>
 <header><h1>RITIK <span>/</span> TRADE JOURNAL</h1><p>RITIK • DISCIPLINE IS THE ENGINE • Times shown in IST (UTC+05:30, Kolkata) • TypeScript build</p></header>
 <nav>
-<button data-tab="journal" class="active" onclick="showTab('journal',this)">Journal</button>
-<button data-tab="analytics" onclick="showTab('analytics',this)">Analytics</button>
-<button data-tab="news" onclick="showTab('news',this)">Forex News</button>
-<button data-tab="chart" onclick="showTab('chart',this)">Live Chart</button>
-<button data-tab="tools" onclick="showTab('tools',this)">Tools &amp; Challenge</button>
+<button data-tab="dashboard" class="active" onclick="showTab('dashboard',this)">🏠 Home</button>
+<button data-tab="journal" onclick="showTab('journal',this)">📓 Journal</button>
+<button data-tab="analytics" onclick="showTab('analytics',this)">📊 Analysis</button>
+<button data-tab="news" onclick="showTab('news',this)">📰 News</button>
+<button data-tab="chart" onclick="showTab('chart',this)">📈 Chart</button>
+<button data-tab="tools" onclick="showTab('tools',this)">🧰 Tools</button>
 </nav>
 <main>
+<div id="tab-dashboard">
+<section><h2>Dashboard — Overview</h2><div class="cards" id="dashStats"></div><p class="small">Ye tumhare journal ke trades se banta hai, koi broker data nahi hai.</p></section>
+<section><h2>Monthly P&amp;L Calendar (this month, daily Net R)</h2><div id="dashCalendar"></div></section>
+<section><h2>Open Positions</h2><p>No open positions. Ye journal me manual entries ka record hai, live broker positions yahan nahi aati hain.</p><p class="small">MT4 / MT5 Auto-Sync: Not connected. Static GitHub Pages site broker se connect nahi kar sakti, isliye is site par sirf manual trade entry hai, jaise PRD ke Free plan me hota hai. Koi fake sync dikhaya nahi gaya hai.</p></section>
+<section><h2>Recent Activity</h2><div id="recentActivity"></div></section>
+</div>
 <div class="cards" id="stats"></div>
-<div id="tab-journal">
+<div id="tab-journal" style="display:none">
 <section><h2>Session reminders (IST)</h2><p id="reminders" class="small">Loading countdowns…</p>
 <p class="small">London: 1:30 PM – 10:30 PM IST. New York: from 2 Nov 2026, 6:30 PM – 3:30 AM IST. Asia: 5:30 AM – 2:30 PM IST.</p></section>
 <section><h2>Pre-trade checklist</h2>
@@ -64,6 +73,9 @@ html,body{max-width:100%;overflow-x:hidden}section{overflow-wrap:break-word}
 <div><label>Stop-loss (pips)<input type="number" step="0.1" id="fSl"></label></div>
 <div><label>Result (R)<input type="number" step="0.01" id="fR" required placeholder="e.g. 2, -1, 0"></label></div>
 <div><label>Outcome</label><div class="ios-dd" data-field="outcome" data-options="TP,SL,BE,Partial,Not Taken" data-value="TP"></div></div>
+<div><label>Emotion (trade ke time)</label><div class="ios-dd" data-field="emotion" data-options="Calm,Confident,FOMO,Revenge,Fear,Greedy,Other" data-value="Calm"></div></div>
+<div><label>Trade rating (1–5)</label><div class="ios-dd" data-field="rating" data-options="5,4,3,2,1" data-value="5"></div></div>
+<div><label>Hold duration<input id="fHold" placeholder="e.g. 12h 7m"></label></div>
 </div>
 <label>Ek Seekh (lesson)<input id="fLesson" placeholder="One lesson from this trade"></label>
 <label>Description (optional)<textarea id="fDesc" rows="3"></textarea></label>
@@ -87,6 +99,13 @@ html,body{max-width:100%;overflow-x:hidden}section{overflow-wrap:break-word}
 <section><h2>Calendar heatmap (this month, daily Net R)</h2><div id="heatmap"></div></section>
 <section><h2>Breakdowns</h2><div id="breakdowns"></div></section>
 <section><h2>Repeat mistake tracker</h2><div id="mistakes"></div></section>
+<section><h2>Trade Analysis — Score, Duration, Filters</h2>
+<p class="small">Score rule-based hai: 50 base + R × 10, risk 0.5% ya kam ho to +10, Out of Zone ho to −10, 0–100 ke beech. Ye tumhare trade ki quality ka andaza hai, koi official score nahi hai.</p>
+<p><button class="btn" onclick="renderTradeAnalysis('all')">All</button> <button class="btn" onclick="renderTradeAnalysis('win')">Winners</button> <button class="btn" onclick="renderTradeAnalysis('loss')">Losers</button></p>
+<div id="tradeAnalysis"></div></section>
+<section><h2>Leaderboard — Top Trades (apni hi trades me se)</h2>
+<p class="small">Ye single-user site hai, isliye asli dusre traders ki ranking yahan nahi hai, aur koi fake community ranking nahi banayi gayi hai. Neeche tumhare apne best trades ki ranking hai, Net R ke hisaab se.</p>
+<div id="leaderboard"></div></section>
 <section><h2>AI Trade Analysis — Tumhare data me kya dikkat hai?</h2>
 <p class="small">Ye bhi rule-based analysis hai, tumhare journal ke trades se nikalta hai. Koi trade ko server par nahi bhejta, sab isi browser me hota hai.</p>
 <div id="aiTrades"></div></section>
@@ -143,5 +162,5 @@ html,body{max-width:100%;overflow-x:hidden}section{overflow-wrap:break-word}
 </main>
 <footer>RITIK • DISCIPLINE IS THE ENGINE</footer>
 <div id="lockScreen" style="display:none;position:fixed;inset:0;background:#0b0f1a;z-index:99;text-align:center;padding-top:30vh"><h2>Trade Journal locked</h2><p>Enter PIN</p><input type="password" id="pinIn" style="max-width:240px"><br><br><button class="btn primary" onclick="unlock()">Unlock</button></div>
-<script src="app.js?v=snapshot1"></script>
+<script src="app.js?v=tfxbook1"></script>
 </body></html>

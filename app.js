@@ -63,13 +63,54 @@ function buildDropdowns() {
 }
 function dd(field) { return ddValues[field] || ""; }
 /* ---------- Tabs ---------- */
+function tradeScore(t) {
+    let s = 50 + t.r * 10;
+    if (num(t.risk) <= 0.5)
+        s += 10;
+    if (t.session === "Out of Zone")
+        s -= 10;
+    return Math.max(0, Math.min(100, Math.round(s)));
+}
+function renderDashboard() {
+    const s = stats();
+    $("dashStats").innerHTML = [["TRADES", String(s.n)], ["WIN RATE", s.win + "%"], ["NET R", s.net.toFixed(2)], ["STREAK", s.streak]].map((x) => `<div class="card"><span>${x[0]}</span><b>${x[1]}</b></div>`).join("");
+    const now = new Date(), ym = now.toISOString().slice(0, 7), days = {};
+    trades.forEach((t) => { if (t.date.startsWith(ym))
+        days[t.date] = (days[t.date] || 0) + t.r; });
+    let html = "";
+    const dim = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+    for (let d = 1; d <= dim; d++) {
+        const k = ym + "-" + String(d).padStart(2, "0"), v = days[k] || 0;
+        html += `<span class="day ${v > 0 ? "pos" : v < 0 ? "neg" : ""}" title="${k}: ${v.toFixed(2)}R">${d}</span>`;
+    }
+    $("dashCalendar").innerHTML = html;
+    $("recentActivity").innerHTML = trades.slice(-5).reverse().map((t) => `<p>${esc(t.date)} • ${esc(t.pair)} ${esc(t.dir)} • <b class="${t.r >= 0 ? "win" : "loss"}">${t.r}R</b> • ${esc(t.outcome)}${t.hold ? ` • Duration: ${esc(t.hold)}` : ""}</p>`).join("") || "<p>No trades yet.</p>";
+}
+function renderTradeAnalysis(filter) {
+    let list = [...trades];
+    if (filter === "win")
+        list = list.filter((t) => t.r > 0);
+    if (filter === "loss")
+        list = list.filter((t) => t.r < 0);
+    $("tradeAnalysis").innerHTML = list.map((t) => `<p><b>${esc(t.pair)} ${esc(t.dir)}</b> • ${esc(t.date)} • Score: <b>${tradeScore(t)}</b> • Duration: ${esc(t.hold || "—")} • ${t.r}R • Emotion: ${esc(t.emotion || "—")} • Rating: ${esc(t.rating || "—")}/5 • ${esc(t.lesson)}</p>`).join("") || "<p>No trades in this filter.</p>";
+}
+window.renderTradeAnalysis = renderTradeAnalysis;
+function renderLeaderboard() {
+    const top = [...trades].sort((a, b) => b.r - a.r).slice(0, 5);
+    $("leaderboard").innerHTML = top.map((t, i) => `<p><b>#${i + 1}</b> ${esc(t.date)} • ${esc(t.pair)} ${esc(t.dir)} • <b class="${t.r >= 0 ? "win" : "loss"}">${t.r}R</b> • Score: ${tradeScore(t)}</p>`).join("") || "<p>No trades yet.</p>";
+}
 function showTab(id, btn) {
-    ["journal", "analytics", "news", "chart", "tools"].forEach((t) => { const el = document.getElementById("tab-" + t); if (el)
+    ["dashboard", "journal", "analytics", "news", "chart", "tools"].forEach((t) => { const el = document.getElementById("tab-" + t); if (el)
         el.style.display = t === id ? "block" : "none"; });
     document.querySelectorAll("nav button").forEach((b) => b.classList.remove("active"));
     btn.classList.add("active");
-    if (id === "analytics")
+    if (id === "dashboard")
+        renderDashboard();
+    if (id === "analytics") {
         renderAnalytics();
+        renderTradeAnalysis("all");
+        renderLeaderboard();
+    }
     if (id === "news") {
         loadCalendar();
         loadNews();
@@ -107,7 +148,7 @@ function render() {
     const q = $("q").value.toLowerCase();
     const qs = dd("qSession");
     const rows = trades.map((t, i) => ({ ...t, i })).reverse().filter((t) => (!qs || t.session === qs) && (!q || JSON.stringify(t).toLowerCase().includes(q)));
-    $("history").innerHTML = rows.map((t) => `<tr><td>${esc(t.date)}</td><td>${esc(t.pair)}<br><span class="small">${esc(t.session)}</span></td><td>${esc(t.dir)}<br><span class="small">${esc(t.level)} ${esc(t.tf)}</span></td><td>${esc(t.risk)}%<br><b class="${t.r >= 0 ? "win" : "loss"}">${t.r}R</b></td><td>${esc(t.outcome)}</td><td>${esc(t.lesson)}<br><span class="small">${esc(t.desc)}</span><br>${t.images.map((im) => `<img src="${im}" style="width:60px;height:40px;object-fit:cover;border-radius:8px;margin:2px">`).join("")}</td><td><button class="btn" data-del="${t.i}">Delete</button></td></tr>`).join("") || '<tr><td colspan="7">No entries yet. Add your first entry above.</td></tr>';
+    $("history").innerHTML = rows.map((t) => `<tr><td>${esc(t.date)}</td><td>${esc(t.pair)}<br><span class="small">${esc(t.session)}</span></td><td>${esc(t.dir)}<br><span class="small">${esc(t.level)} ${esc(t.tf)}</span></td><td>${esc(t.risk)}%<br><b class="${t.r >= 0 ? "win" : "loss"}">${t.r}R</b></td><td>${esc(t.outcome)}<br><span class="small">Score ${tradeScore(t)}${t.hold ? ` • ${esc(t.hold)}` : ""}</span></td><td>${esc(t.lesson)}<br><span class="small">${esc(t.desc)}${t.emotion ? ` • Emotion: ${esc(t.emotion)}` : ""}${t.rating ? ` • Rating: ${esc(t.rating)}/5` : ""}</span><br>${t.images.map((im) => `<img src="${im}" style="width:60px;height:40px;object-fit:cover;border-radius:8px;margin:2px">`).join("")}</td><td><button class="btn" data-del="${t.i}">Delete</button></td></tr>`).join("") || '<tr><td colspan="7">No entries yet. Add your first entry above.</td></tr>';
     document.querySelectorAll("[data-del]").forEach((b) => b.addEventListener("click", () => { if (confirm("Delete this entry?")) {
         trades.splice(Number(b.dataset.del), 1);
         save();
@@ -179,6 +220,7 @@ $("entryForm").addEventListener("submit", async (e) => {
         module: $("fModule").value, risk: $("fRisk").value,
         sl: $("fSl").value, r: num($("fR").value),
         outcome: dd("outcome"), lesson: $("fLesson").value,
+        emotion: dd("emotion"), rating: dd("rating"), hold: $("fHold").value,
         desc: $("fDesc").value,
         checklist: ["c1", "c2", "c3", "c4"].filter((id) => $(id).checked),
         images: kept,
@@ -433,3 +475,4 @@ setInterval(reminders, 60000);
 reminders();
 buildDropdowns();
 render();
+renderDashboard();
