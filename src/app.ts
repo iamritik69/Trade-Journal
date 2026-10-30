@@ -85,6 +85,7 @@ function renderLeaderboard(): void {
 function showTab(id: string, btn: HTMLElement): void {
   ["dashboard", "journal", "analytics", "news", "tools"].forEach((t) => { const el = document.getElementById("tab-" + t); if (el) el.style.display = t === id ? "block" : "none"; });
   document.querySelectorAll("nav button").forEach((b) => b.classList.remove("active")); btn.classList.add("active");
+  window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });
   if (id === "dashboard") renderDashboard();
   if (id === "analytics") { renderAnalytics(); renderTradeAnalysis("all"); renderLeaderboard(); }
   if (id === "news") { loadCalendar(); loadNews(); }
