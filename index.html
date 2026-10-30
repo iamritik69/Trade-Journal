@@ -42,6 +42,7 @@ html,body{max-width:100%;overflow-x:hidden}section{overflow-wrap:break-word}
 <button data-tab="analytics" onclick="showTab('analytics',this)">📊 Analysis</button>
 <button data-tab="news" onclick="showTab('news',this)">📰 News</button>
 <button data-tab="chart" onclick="showTab('chart',this)">📈 Chart</button>
+<button data-tab="livegold" onclick="showTab('livegold',this);loadLiveGold()">💰 Live Gold</button>
 <button data-tab="tools" onclick="showTab('tools',this)">🧰 Tools</button>
 </nav>
 <main>
@@ -148,6 +149,14 @@ html,body{max-width:100%;overflow-x:hidden}section{overflow-wrap:break-word}
 <p class="small"><b>24/7 wali sachai:</b> TradingView ka free embed widget community Pine script ko site ke code se permanently pin nahi kar sakta, ye TradingView ki limit hai. Isliye is site ke chart me JADU-TONA har baar khud se nahi aayega. Permanent tareeqa: upar wale link se TradingView par chart kholo, Indicators me JADU-TONA search karke Add karo, phir apne TradingView account me chart layout Save karo, to TradingView par kholne par wo hamesha laga milega. Is site ke chart me Indicators button se bhi usi session ke liye add kar sakte ho, par reload par hat sakta hai.</p>
 <p class="small">Steps: Chart tab me Load live chart dabao → chart ke upar Indicators dabao → "JADU-TONA" search karo → trades-by-rm wala select karo → Settings me FVG / Order Blocks / Kill Zones on karna ho to on karo, warna default settings hi theek hain.</p></section>
 </div>
+<div id="tab-livegold" style="display:none">
+<section><h2>Live Gold — Real Spot Price (API)</h2>
+<p id="liveGoldPrice">Loading live price...</p>
+<p><button class="btn" onclick="loadLiveGold()">Refresh live price</button></p>
+<div id="liveGoldChartBox" style="width:100%;height:300px"></div>
+<p class="small"><b>Real hai, demo nahi:</b> har point api.gold-api.com se live aata hai, bina API key ke. <b>Limit:</b> ye free API sirf current spot price deta hai, pichli candles ka history nahi deta, isliye line chart tab kholne ke baad point by point banta hai, pehle se bhara hua history chart nahi hai. Swing / BOS / CHOCH / TJL-QML levels ke liye pichli candles chahiye, wo levels real TradingView chart (Live Chart tab) par JADU-TONA indicator me hi milenge, is spot API se nahi ban sakte. Spot price TradingView ke OANDA XAUUSD se thoda alag ho sakta hai, kyunki source alag hai.</p>
+<p class="small"><b>Levels:</b> agar tumhe JADU wale TJL / QML / SBR / RBS levels chahiye, to wo Live Chart tab me TradingView indicator se hi milenge. Bata do kaunse levels chahiye, to main wahi section saaf karke dikha dunga, bina fake levels banaye.</p></section>
+</div>
 <div id="tab-tools" style="display:none">
 <section><h2>Risk / position-size calculator — live</h2>
 <div class="row"><div><label>Account size ($) <input type="number" id="acc" value="10000"></label></div>
@@ -169,5 +178,7 @@ html,body{max-width:100%;overflow-x:hidden}section{overflow-wrap:break-word}
 </main>
 <footer>RITIK • DISCIPLINE IS THE ENGINE</footer>
 <div id="lockScreen" style="display:none;position:fixed;inset:0;background:#0b0f1a;z-index:99;text-align:center;padding-top:30vh"><h2>Trade Journal locked</h2><p>Enter PIN</p><input type="password" id="pinIn" style="max-width:240px"><br><br><button class="btn primary" onclick="unlock()">Unlock</button></div>
-<script src="app.js?v=real2"></script>
+<script src="https://unpkg.com/lightweight-charts@4.2.0/dist/lightweight-charts.standalone.production.js"></script>
+<script src="live-gold.js"></script>
+<script src="app.js?v=real3"></script>
 </body></html>

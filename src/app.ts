@@ -82,7 +82,7 @@ function renderLeaderboard(): void {
   $("leaderboard").innerHTML = top.map((t, i) => `<p><b>#${i + 1}</b> ${esc(t.date)} • ${esc(t.pair)} ${esc(t.dir)} • <b class="${t.r >= 0 ? "win" : "loss"}">${t.r}R</b> • Score: ${tradeScore(t)}</p>`).join("") || "<p>No trades yet.</p>";
 }
 function showTab(id: string, btn: HTMLElement): void {
-  ["dashboard", "journal", "analytics", "news", "chart", "tools"].forEach((t) => { const el = document.getElementById("tab-" + t); if (el) el.style.display = t === id ? "block" : "none"; });
+  ["dashboard", "journal", "analytics", "news", "chart", "livegold", "tools"].forEach((t) => { const el = document.getElementById("tab-" + t); if (el) el.style.display = t === id ? "block" : "none"; });
   document.querySelectorAll("nav button").forEach((b) => b.classList.remove("active")); btn.classList.add("active");
   if (id === "dashboard") renderDashboard();
   if (id === "analytics") { renderAnalytics(); renderTradeAnalysis("all"); renderLeaderboard(); }
