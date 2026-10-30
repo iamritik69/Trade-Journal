@@ -85,10 +85,35 @@ footer{text-align:center;color:#9aa7c7;padding:20px}
 <section><h2>Calendar heatmap (this month, daily Net R)</h2><div id="heatmap"></div></section>
 <section><h2>Breakdowns</h2><div id="breakdowns"></div></section>
 <section><h2>Repeat mistake tracker</h2><div id="mistakes"></div></section>
+<section><h2>AI Trade Analysis — Tumhare data me kya dikkat hai?</h2>
+<p class="small">Ye bhi rule-based analysis hai, tumhare journal ke trades se nikalta hai. Koi trade ko server par nahi bhejta, sab isi browser me hota hai.</p>
+<div id="aiTrades"></div></section>
 </div>
 <div id="tab-news" style="display:none">
 <section><h2>Forex News — Economic Calendar</h2>
-<p class="small">Source: Forex Factory / Faireconomy calendar feed, tried directly and via CORS proxies. Times converted to IST. Gold has no separate calendar — watch USD events for XAUUSD. No events are invented here.</p>
+<p class="small">Live calendar below is the TradingView Economic Calendar widget (USD / EUR / GBP, all importance levels). It works on a static site without a server. Gold has no separate calendar — watch USD events for XAUUSD.</p>
+<div style="display:grid;grid-template-columns:1fr;gap:14px" id="newsGrid">
+<div><div class="tradingview-widget-container"><div class="tradingview-widget-container__widget" style="height:600px"></div><script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-events.js" async>
+{"colorTheme": "dark", "isTransparent": false, "locale": "en", "countryFilter": "us,eu,gb", "importanceFilter": "-1,0,1", "currencyFilter": "USD,EUR,GBP", "width": "100%", "height": "600"}
+</script></div></div>
+<div><h3>Live Gold Chart — XAUUSD (TradingView)</h3>
+<div class="tradingview-widget-container"><div class="tradingview-widget-container__widget" style="height:600px"></div><script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" async>
+{"autosize": true, "symbol": "OANDA:XAUUSD", "interval": "60", "timezone": "Asia/Kolkata", "theme": "dark", "style": "1", "locale": "en", "hide_side_toolbar": false, "allow_symbol_change": true, "support_host": "https://www.tradingview.com"}
+</script></div>
+<p class="small">Live chart TradingView se aata hai. Agar chart load na ho to internet / TradingView block check karo, ye site ka data nahi hai.</p></div>
+</div>
+<style>@media(min-width:900px){#newsGrid{grid-template-columns:1fr 1fr}}</style>
+<section style="margin-top:14px"><h2>AI News Analysis — Gold aur Pairs ke liye</h2>
+<p class="small"><b>Important:</b> Ye analysis rule-based hai, koi real AI model ya price prediction nahi hai. Ye batata hai ki news aam taur par kis pair ke liye positive / negative maani jaati hai, aur gold par kis taraf pressure ban sakta hai. Ye trading advice nahi hai, aur pump / dump ki guarantee nahi deta. Asli price actual data aane ke baad hi react karta hai.</p>
+<div id="aiNews">News load hote hi analysis yahan aayega. Agar feed fail ho to neeche manual tool use karo.</div>
+<h3>Manual News Checker (feed na chale to bhi kaam karega)</h3>
+<div class="row"><div><label>Event type</label><div class="ios-dd" data-field="evType" data-options="CPI / Inflation,Non-Farm Payrolls (NFP),FOMC / Interest Rate Decision,GDP,Unemployment / Jobless Claims,PMI,Retail Sales,Other USD News" data-value="CPI / Inflation"></div></div>
+<div><label>Actual vs Forecast</label><div class="ios-dd" data-field="evBeat" data-options="Actual zyada (Beat),Actual kam (Miss),Actual = Forecast" data-value="Actual zyada (Beat)"></div></div></div>
+<button class="btn primary" onclick="manualNews()" style="margin-top:12px">Analyze this news</button>
+<div id="manualNewsOut" style="margin-top:10px"></div>
+</section>
+<h3 style="margin-top:20px">Forex Factory list (backup)</h3>
+<p class="small">Backup list below tries the Forex Factory / Faireconomy feed directly and via proxies. That feed blocks browser access (no CORS header), so this list may fail even when the widget above works. No events are invented here.</p>
 <label><input type="checkbox" id="highOnly" onchange="loadNews()"> High-impact only</label>
 <button class="btn" onclick="loadNews()" style="margin-left:8px">Refresh</button>
 <p><a href="https://www.forexfactory.com/calendar" target="_blank" rel="noopener">Open Forex Factory Calendar (source)</a></p>

@@ -155,6 +155,7 @@ function renderAnalytics() {
     trades.forEach((t) => { if (t.lesson)
         counts[t.lesson] = (counts[t.lesson] || 0) + 1; });
     $("mistakes").innerHTML = Object.entries(counts).filter((x) => x[1] > 1).map((x) => `<p>${esc(x[0])} — <b>${x[1]} times</b></p>`).join("") || '<p class="small">No repeated lesson yet.</p>';
+    analyzeTrades();
 }
 /* ---------- Entry form ---------- */
 function readFiles(files) {
@@ -232,8 +233,15 @@ else
 if (localStorage.getItem("ritik_pin_hash"))
     $("lockScreen").style.display = "block";
 /* ---------- Forex News: direct, then CORS proxies, never invented ---------- */
-async function fetchJson(url) { const res = await fetch(url); if (!res.ok)
-    throw new Error("feed failed"); return res.json(); }
+async function fetchJson(url) { const ctrl = new AbortController(); const timer = setTimeout(() => ctrl.abort(), 8000); try {
+    const res = await fetch(url, { signal: ctrl.signal });
+    if (!res.ok)
+        throw new Error("feed failed");
+    return await res.json();
+}
+finally {
+    clearTimeout(timer);
+} }
 async function loadNews() {
     const box = $("news");
     box.textContent = "Loading…";
@@ -253,17 +261,100 @@ async function loadNews() {
         }
     }
     if (!Array.isArray(raw)) {
-        box.innerHTML = `<p>Live calendar feed could not be loaded in this browser (${esc(lastErr)}). Open the source link below for the current calendar. No events have been invented here.</p>`;
+        box.innerHTML = `<p>Live calendar feed could not be loaded in this browser (${esc(lastErr)}). Upar TradingView widget se live calendar dekho, aur neeche Manual News Checker se kisi bhi event ka asar check karo. No events have been invented here.</p>`;
+        $("aiNews").innerHTML = "<p>Feed load nahi hui, isliye auto-analysis khaali hai. Upar TradingView calendar dekho, ya Manual News Checker me event type aur actual vs forecast chuno, wahan Gold aur pairs ka asar milega.</p>";
         return;
     }
     let ev = raw.map((e) => ({ title: String(e.title || ""), currency: String(e.country || e.currency || ""), date: String(e.date || ""), impact: String(e.impact || ""), forecast: String(e.forecast || ""), previous: String(e.previous || "") })).filter((e) => ["USD", "EUR", "GBP"].includes(e.currency));
     if ($("highOnly").checked)
         ev = ev.filter((e) => e.impact === "High");
     ev.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+    analyzeNews(ev);
     const now = new Date();
     box.innerHTML = ev.map((e) => { const d = new Date(new Date(e.date).getTime() + 5.5 * 3600 * 1000); return `<p><b>${d.toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}</b> • ${esc(e.currency)} • ${esc(e.impact)} • ${esc(e.title)} • Forecast: ${esc(e.forecast || "—")} • Previous: ${esc(e.previous || "—")} ${d < now ? '<span class="small">(past)</span>' : ""}</p>`; }).join("") || "<p>No events match this filter this week.</p>";
 }
 window.loadNews = loadNews;
+function goldBiasFor(e) {
+    if (e.currency === "USD")
+        return "Gold ke liye pressure: USD strong = Gold par neeche ka pressure (bearish), USD weak = Gold ko support (bullish).";
+    if (e.currency === "EUR")
+        return "EURUSD ke liye main event hai, Gold par seedha asar kam hai.";
+    if (e.currency === "GBP")
+        return "GBPUSD ke liye main event hai, Gold par seedha asar kam hai.";
+    return "Is currency ka Gold par seedha asar kam hai.";
+}
+function analyzeNews(ev) {
+    const box = $("aiNews");
+    if (!ev.length) {
+        box.innerHTML = "<p>Is week me USD / EUR / GBP ka koi event filter me nahi mila, isliye summary khaali hai.</p>";
+        return;
+    }
+    const high = ev.filter((e) => e.impact === "High");
+    const usd = ev.filter((e) => e.currency === "USD");
+    const eur = ev.filter((e) => e.currency === "EUR");
+    const gbp = ev.filter((e) => e.currency === "GBP");
+    const bias = usd.length >= 2 ? "Aaj / is week me zyada USD events hain, isliye Gold par USD ki taraf se pressure ban sakta hai. Ye direction ki guarantee nahi hai, actual number aane par hi price decide hoga." : "USD events kam hain, isliye Gold par news ka pressure is week me limited dikh raha hai.";
+    box.innerHTML = `<p><b>Summary:</b> Total events: ${ev.length} (High impact: ${high.length}, USD: ${usd.length}, EUR: ${eur.length}, GBP: ${gbp.length}). ${bias}</p>
+  <table><tr><th>Pair</th><th>News ka aam asar</th></tr>
+  <tr><td><b>XAUUSD (Gold)</b></td><td>USD strong news = Gold ke liye negative (dump pressure), USD weak news = Gold ke liye positive (pump support). EUR / GBP news ka Gold par seedha asar kam hota hai.</td></tr>
+  <tr><td><b>EURUSD</b></td><td>EUR strong = EURUSD positive, USD strong = EURUSD negative.</td></tr>
+  <tr><td><b>GBPUSD</b></td><td>GBP strong = GBPUSD positive, USD strong = GBPUSD negative.</td></tr>
+  <tr><td><b>USDJPY</b></td><td>USD strong = USDJPY positive (JPY ke against USD up).</td></tr></table>
+  <h3>Har event ka asar</h3>` + ev.slice(0, 30).map((e) => `<p><b>${esc(e.title)}</b> (${esc(e.currency)}, ${esc(e.impact)}) — ${goldBiasFor(e)} Forecast: ${esc(e.forecast || "—")}, Previous: ${esc(e.previous || "—")}.</p>`).join("");
+}
+window.manualNews = () => {
+    const type = dd("evType"), beat = dd("evBeat");
+    let gold = "", pair = "";
+    if (type.includes("CPI") || type.includes("NFP") || type.includes("GDP") || type.includes("PMI") || type.includes("Retail")) {
+        const strong = beat.includes("zyada");
+        gold = strong ? "USD strong mana jayega, Gold ke liye negative pressure (dump ki taraf), kyunki strong USD aam taur par Gold ko neeche dhakelti hai." : beat.includes("kam") ? "USD weak mana jayega, Gold ke liye positive support (pump ki taraf)." : "Neutral, Gold par bada move expect nahi karna chahiye.";
+        pair = strong ? "EURUSD / GBPUSD ke liye negative, USDJPY ke liye positive." : beat.includes("kam") ? "EURUSD / GBPUSD ke liye positive, USDJPY ke liye negative." : "Pairs par neutral asar.";
+    }
+    else if (type.includes("FOMC")) {
+        gold = beat.includes("zyada") ? "Hawkish (rate up / hawkish tone) = USD strong = Gold negative." : "Dovish (rate cut / dovish tone) = USD weak = Gold positive.";
+        pair = "EURUSD / GBPUSD USD ke ulta, USDJPY USD ke saath.";
+    }
+    else if (type.includes("Unemployment")) {
+        gold = beat.includes("zyada") ? "Unemployment zyada = economy weak = USD weak = Gold positive." : "Unemployment kam = economy strong = USD strong = Gold negative.";
+        pair = "EURUSD / GBPUSD USD ke ulta.";
+    }
+    else {
+        gold = "USD news aam taur par Gold ke ulta chalti hai: USD strong = Gold negative, USD weak = Gold positive.";
+        pair = "EURUSD / GBPUSD USD ke ulta, USDJPY USD ke saath.";
+    }
+    $("manualNewsOut").innerHTML = `<p><b>${esc(type)} — ${esc(beat)}</b></p><p>Gold: ${gold}</p><p>Pairs: ${pair}</p><p class="small">Ye aam market logic hai, prediction nahi. Actual move volume, market ki pehle se expectation aur usi time ke doosre events par bhi depend karta hai.</p>`;
+};
+function analyzeTrades() {
+    const box = $("aiTrades");
+    if (!trades.length) {
+        box.innerHTML = "<p>Abhi koi entry nahi hai, isliye analysis khaali hai. Pehli entry daalo, phir yahan tumhari galtiyan, best pair, worst session sab dikhega.</p>";
+        return;
+    }
+    const s = stats();
+    const ooz = trades.filter((t) => t.session === "Out of Zone").length;
+    const highRisk = trades.filter((t) => num(t.risk) > 0.5).length;
+    const byPair = {};
+    trades.forEach((t) => { const p = byPair[t.pair] || { n: 0, net: 0, w: 0 }; p.n++; p.net += t.r; if (t.r > 0)
+        p.w++; byPair[t.pair] = p; });
+    const sorted = Object.entries(byPair).sort((a, b) => b[1].net - a[1].net);
+    const best = sorted[0], worst = sorted[sorted.length - 1];
+    const lessons = {};
+    trades.forEach((t) => { if (t.lesson)
+        lessons[t.lesson] = (lessons[t.lesson] || 0) + 1; });
+    const topLesson = Object.entries(lessons).sort((a, b) => b[1] - a[1])[0];
+    const recs = [];
+    if (ooz)
+        recs.push(`Out of Zone me ${ooz} trade ki hain — ye sabse badi dikkat lag rahi hai, session ke bahar trade karna band karo.`);
+    if (highRisk)
+        recs.push(`${highRisk} trade me risk 0.5% se zyada tha — risk limit todna ek pattern hai, isko fix karo.`);
+    if (s.win < 40)
+        recs.push(`Win rate ${s.win}% hai, jo low hai — level ya entry module ko ek hi setup par focus karo, har level mat try karo.`);
+    if (topLesson && topLesson[1] > 1)
+        recs.push(`Sabse zyada repeat hone wali galti: "${topLesson[0]}" (${topLesson[1]} baar) — isko agle trade se pehle checklist me likh lo.`);
+    if (!recs.length)
+        recs.push("Is data me bada pattern nahi mila — risk, session aur repeat galti sab control me lag rahe hain. Ab focus sirf ek setup par rakho.");
+    box.innerHTML = `<p><b>Summary:</b> Total trades: ${trades.length}, Win rate: ${s.win}%, Net R: ${s.net.toFixed(2)}, Max DD: ${s.dd}R.</p><p>Best pair: <b>${best ? esc(best[0]) + " (" + best[1].net.toFixed(2) + "R)" : "—"}</b> • Worst pair: <b>${worst ? esc(worst[0]) + " (" + worst[1].net.toFixed(2) + "R)" : "—"}</b></p><p><b>Kya dikkat hai:</b></p><ul>${recs.map((r) => `<li>${esc(r)}</li>`).join("")}</ul>`;
+}
 /* ---------- Reminders ---------- */
 function reminders() {
     const now = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" }));
