@@ -181,5 +181,6 @@ html,body{max-width:100%;overflow-x:hidden}section{overflow-wrap:break-word}
 <div id="lockScreen" style="display:none;position:fixed;inset:0;background:#0b0f1a;z-index:99;text-align:center;padding-top:30vh"><h2>Trade Journal locked</h2><p>Enter PIN</p><input type="password" id="pinIn" style="max-width:240px"><br><br><button class="btn primary" onclick="unlock()">Unlock</button></div>
 <script src="https://unpkg.com/lightweight-charts@4.2.0/dist/lightweight-charts.standalone.production.js"></script>
 <script src="live-gold.js"></script>
+<script>function glassPriceFetch(){fetch('https://api.gold-api.com/price/XAU').then(function(r){return r.json()}).then(function(j){var e=document.getElementById('glassPrice');if(e)e.innerHTML='💰 Live Gold: $'+Number(j.price).toFixed(2)+' • '+new Date(j.updatedAt||Date.now()).toLocaleString('en-IN',{timeZone:'Asia/Kolkata',hour12:true})+' IST';}).catch(function(){});}glassPriceFetch();setInterval(glassPriceFetch,30000);</script>
 <script src="app.js?v=glass1"></script>
 </body></html>
