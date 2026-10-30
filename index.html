@@ -125,6 +125,8 @@ nav{border-radius:28px}
 <div id="aiTrades"></div></section>
 </div>
 <div id="tab-news" style="display:none">
+<section><h2>📰 Investing.com — Forex News</h2><p class="small">Forex ki latest news articles yahan se padh sakte ho. Ye link tumhe Investing.com ke Forex News page par le jayega.</p><a class="btn primary" href="https://www.investing.com/news/forex-news/" target="_blank" rel="noopener" style="display:inline-block;text-decoration:none">Investing.com Forex News Kholo →</a><p class="small">Note: Investing.com ke articles is site ke andar copy nahi kiye gaye hain, wo unki site par hi padhne honge. Calendar aur AI analysis upar wale sections me hi rahenge.</p></section>
+
 <section><h2>Forex News — Economic Calendar</h2>
 <p class="small">Live calendar below is the TradingView Economic Calendar widget (USD / EUR / GBP, red folder / high-impact events only). It works on a static site without a server. Gold has no separate calendar — watch USD events for XAUUSD.</p>
 <div style="display:grid;grid-template-columns:1fr;gap:14px" id="newsGrid">
@@ -221,7 +223,7 @@ body{background-image:radial-gradient(circle at 20% 20%,rgba(74,222,128,.18),tra
 <script src="https://unpkg.com/lightweight-charts@4.2.0/dist/lightweight-charts.standalone.production.js"></script>
 <script src="live-gold.js"></script>
 <script>function glassPriceFetch(){fetch('https://api.gold-api.com/price/XAU').then(function(r){return r.json()}).then(function(j){var e=document.getElementById('glassPrice');if(e)e.innerHTML='💰 Live Gold: $'+Number(j.price).toFixed(2)+' • '+new Date(j.updatedAt||Date.now()).toLocaleString('en-IN',{timeZone:'Asia/Kolkata',hour12:true})+' IST';}).catch(function(){});}glassPriceFetch();setInterval(glassPriceFetch,30000);</script>
-<script src="app.js?v=newsai1"></script>
+<script src="app.js?v=invest1"></script>
 
 <script>
 // iOS-style click sound, synthesized in-browser (no Apple audio file copied).
