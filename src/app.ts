@@ -45,10 +45,12 @@ function buildDropdowns(): void {
         if (field === "qSession" || field === "aPair" || field === "aSession") { render(); renderAnalytics(); }
       }));
       sheet.classList.add("open"); backdrop.classList.add("open");
+      const r = btn.getBoundingClientRect();
+      sheet.style.position = "fixed"; sheet.style.left = r.left + "px"; sheet.style.top = (r.bottom + 6) + "px"; sheet.style.width = r.width + "px"; sheet.style.right = "auto";
     };
     btn.addEventListener("click", (e) => { e.stopPropagation(); sheet.classList.contains("open") ? close() : open(); });
     backdrop.addEventListener("click", close);
-    renderBtn(); el.appendChild(btn); document.body.appendChild(backdrop); el.appendChild(sheet);
+    renderBtn(); el.appendChild(btn); document.body.appendChild(backdrop); document.body.appendChild(sheet);
   });
 }
 function dd(field: string): string { return ddValues[field] || ""; }
