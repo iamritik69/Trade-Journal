@@ -113,7 +113,7 @@ html,body{max-width:100%;overflow-x:hidden}section{overflow-wrap:break-word}
 </div>
 <div id="tab-news" style="display:none">
 <section><h2>Forex News — Economic Calendar</h2>
-<p class="small">Live calendar below is the TradingView Economic Calendar widget (USD / EUR / GBP, all importance levels). It works on a static site without a server. Gold has no separate calendar — watch USD events for XAUUSD.</p>
+<p class="small">Live calendar below is the TradingView Economic Calendar widget (USD / EUR / GBP, red folder / high-impact events only). It works on a static site without a server. Gold has no separate calendar — watch USD events for XAUUSD.</p>
 <div style="display:grid;grid-template-columns:1fr;gap:14px" id="newsGrid">
 <div><p class="small">Calendar widget tab kholne par hi load hoga, taaki site lag na kare. Widget tumhare phone ke time zone me time dikhata hai, phone IST (Asia/Kolkata) par set ho to usme bhi IST time dikhega. <button class="btn" onclick="loadCalendar()">Load calendar widget</button></p>
 <div id="tvCalendar"></div></div>
@@ -131,7 +131,7 @@ html,body{max-width:100%;overflow-x:hidden}section{overflow-wrap:break-word}
 </section>
 <h3 style="margin-top:20px">Forex Factory list (backup)</h3>
 <p class="small">Backup list below tries the Forex Factory / Faireconomy feed directly and via proxies. Is list ke saare time IST (Asia/Kolkata) me, 12-hour format me dikhenge, jaise 6:00 PM IST — railway wala 24-hour format (18:00) nahi hoga. That feed blocks browser access (no CORS header), so this list may fail even when the widget above works. No events are invented here.</p>
-<label><input type="checkbox" id="highOnly" onchange="loadNews()"> High-impact only</label>
+<label><input type="checkbox" id="highOnly" checked onchange="loadNews()"> Red folder only (High-impact only)</label>
 <button class="btn" onclick="loadNews(true)" style="margin-left:8px">Refresh (fresh feed)</button>
 <p><a href="https://www.forexfactory.com/calendar" target="_blank" rel="noopener">Open Forex Factory Calendar (source)</a></p>
 <div id="news">Loading…</div></section>
@@ -163,5 +163,5 @@ html,body{max-width:100%;overflow-x:hidden}section{overflow-wrap:break-word}
 </main>
 <footer>RITIK • DISCIPLINE IS THE ENGINE</footer>
 <div id="lockScreen" style="display:none;position:fixed;inset:0;background:#0b0f1a;z-index:99;text-align:center;padding-top:30vh"><h2>Trade Journal locked</h2><p>Enter PIN</p><input type="password" id="pinIn" style="max-width:240px"><br><br><button class="btn primary" onclick="unlock()">Unlock</button></div>
-<script src="app.js?v=tfxbook3"></script>
+<script src="app.js?v=redfolder1"></script>
 </body></html>

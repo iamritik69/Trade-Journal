@@ -294,7 +294,7 @@ function injectWidget(containerId, src, config) {
     el.querySelector(".tradingview-widget-container")?.appendChild(s);
 }
 function loadCalendar() {
-    injectWidget("tvCalendar", "https://s3.tradingview.com/external-embedding/embed-widget-events.js", { colorTheme: "dark", isTransparent: false, locale: "en_US", countryFilter: "us,eu,gb", importanceFilter: "-1,0,1", currencyFilter: "USD,EUR,GBP", width: "100%", height: 600 });
+    injectWidget("tvCalendar", "https://s3.tradingview.com/external-embedding/embed-widget-events.js", { colorTheme: "dark", isTransparent: false, locale: "en_US", countryFilter: "us,eu,gb", importanceFilter: "1", currencyFilter: "USD,EUR,GBP", width: "100%", height: 600 });
 }
 function loadChart() {
     injectWidget("tvChart", "https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js", { autosize: true, symbol: "OANDA:XAUUSD", interval: "60", timezone: "Asia/Kolkata", theme: "dark", style: "1", locale: "en", hide_side_toolbar: false, hide_top_toolbar: false, allow_symbol_change: true, withdateranges: true, details: true, support_host: "https://www.tradingview.com" });
