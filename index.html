@@ -35,7 +35,7 @@ footer{text-align:center;color:#9aa7c7;padding:20px}
 @media(max-width:600px){h1{font-size:24px}.cards{grid-template-columns:repeat(2,1fr)}.row{grid-template-columns:1fr}main{padding:8px 10px 44px}section{padding:14px 12px;overflow-wrap:break-word}h2{font-size:20px;overflow-wrap:break-word}p,li,td{overflow-wrap:break-word;word-break:break-word}table{font-size:13px}}
 html,body{max-width:100%;overflow-x:hidden}section{overflow-wrap:break-word}
 </style></head><body>
-<header><h1>RITIK <span>/</span> TRADE JOURNAL</h1><p id="glassPrice" class="small" style="background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:8px 14px;display:inline-block">💰 Live Gold: loading...</p><p>RITIK • DISCIPLINE IS THE ENGINE • Times shown in IST (UTC+05:30, Kolkata) • TypeScript build</p><button class="btn" id="sideToggle" onclick="document.body.classList.toggle('sidebar-collapsed')">☰ Sidebar slide karo / wapas lao</button></header>
+<header><h1>RITIK <span>/</span> TRADE JOURNAL</h1><p id="glassPrice" class="small" style="background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:8px 14px;display:inline-block">💰 Live Gold: loading...</p><p>RITIK • DISCIPLINE IS THE ENGINE • Times shown in IST (UTC+05:30, Kolkata) • TypeScript build</p><button class="btn" id="soundToggle" onclick="toggleClickSound()">🔊 Click Sound: On</button> <button class="btn" id="sideToggle" onclick="document.body.classList.toggle('sidebar-collapsed')">☰ Sidebar slide karo / wapas lao</button></header>
 <nav>
 <button data-tab="dashboard" class="active" onclick="showTab('dashboard',this)">🏠 Home</button>
 <button data-tab="journal" onclick="showTab('journal',this)">📓 Journal</button>
@@ -183,4 +183,33 @@ html,body{max-width:100%;overflow-x:hidden}section{overflow-wrap:break-word}
 <script src="live-gold.js"></script>
 <script>function glassPriceFetch(){fetch('https://api.gold-api.com/price/XAU').then(function(r){return r.json()}).then(function(j){var e=document.getElementById('glassPrice');if(e)e.innerHTML='💰 Live Gold: $'+Number(j.price).toFixed(2)+' • '+new Date(j.updatedAt||Date.now()).toLocaleString('en-IN',{timeZone:'Asia/Kolkata',hour12:true})+' IST';}).catch(function(){});}glassPriceFetch();setInterval(glassPriceFetch,30000);</script>
 <script src="app.js?v=glass1"></script>
+
+<script>
+// iOS-style click sound, synthesized in-browser (no Apple audio file copied).
+// Short high click, like iOS keyboard/tap feedback.
+var clickCtx = null, clickOn = localStorage.getItem('ritik_click_sound') !== 'off';
+function playClick(){
+  if(!clickOn) return;
+  try{
+    if(!clickCtx) clickCtx = new (window.AudioContext||window.webkitAudioContext)();
+    if(clickCtx.state === 'suspended') clickCtx.resume();
+    var o = clickCtx.createOscillator(), g = clickCtx.createGain();
+    o.type = 'sine'; o.frequency.setValueAtTime(2200, clickCtx.currentTime);
+    o.frequency.exponentialRampToValueAtTime(900, clickCtx.currentTime + 0.03);
+    g.gain.setValueAtTime(0.12, clickCtx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, clickCtx.currentTime + 0.05);
+    o.connect(g); g.connect(clickCtx.destination); o.start(); o.stop(clickCtx.currentTime + 0.06);
+  }catch(e){}
+}
+function toggleClickSound(){
+  clickOn = !clickOn;
+  localStorage.setItem('ritik_click_sound', clickOn ? 'on' : 'off');
+  var b = document.getElementById('soundToggle'); if(b) b.textContent = clickOn ? '🔊 Click Sound: On' : '🔇 Click Sound: Off';
+  if(clickOn) playClick();
+}
+document.addEventListener('click', function(e){
+  if(e.target.closest('button, .btn, .dd-opt, .dd-btn, nav button')) playClick();
+});
+(function(){var b=document.getElementById('soundToggle'); if(b && !clickOn) b.textContent='🔇 Click Sound: Off';})();
+</script>
 </body></html>
