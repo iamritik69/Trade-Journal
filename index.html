@@ -172,6 +172,14 @@ h1{background-size:200% 100%;animation:floatGlow 8s ease-in-out infinite}
 #mouseGlow{position:fixed;width:420px;height:420px;border-radius:50%;pointer-events:none;z-index:1;background:radial-gradient(circle,rgba(74,222,128,.14),transparent 60%);transform:translate(-50%,-50%);left:50%;top:30%}
 section.reveal{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease}
 section.reveal.visible{opacity:1;transform:none}
+
+/* Khatarnak full animation: green orbs, grid, glow, scroll progress, tilt */
+body{background-image:radial-gradient(circle at 20% 20%,rgba(74,222,128,.18),transparent 40%),radial-gradient(circle at 80% 10%,rgba(124,92,255,.16),transparent 40%),linear-gradient(180deg,#071018,#0b0f1a)!important}
+#scrollBar{position:fixed;top:0;left:0;height:4px;background:linear-gradient(90deg,#4ade80,#f5b301,#ff5ea8);z-index:100;width:0}
+.hero-anim h2{text-shadow:0 0 24px rgba(74,222,128,.55)}
+.orb{position:fixed;width:220px;height:220px;border-radius:50%;filter:blur(60px);opacity:.35;pointer-events:none;z-index:0;animation:orbFloat 10s ease-in-out infinite}
+@keyframes orbFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-30px)}}
+.card{transform-style:preserve-3d;transition:transform .2s ease,box-shadow .2s ease}
 </style>
 <section style="margin-top:14px"><h2>AI News Analysis — Gold aur Pairs ke liye</h2>
 <p class="small"><b>Important:</b> Ye analysis rule-based hai, koi real AI model ya price prediction nahi hai. Ye batata hai ki news aam taur par kis pair ke liye positive / negative maani jaati hai, aur gold par kis taraf pressure ban sakta hai. Ye trading advice nahi hai, aur pump / dump ki guarantee nahi deta. Asli price actual data aane ke baad hi react karta hai.</p>
