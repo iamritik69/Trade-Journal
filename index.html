@@ -55,6 +55,7 @@ nav{border-radius:28px}
 </nav>
 <main>
 <div id="tab-dashboard">
+<section class="hero-anim"><h2 style="font-size:28px">DISCIPLINE IS THE ENGINE</h2><p class="small">Scroll karo, sections slide-in honge, numbers count-up honge, aur upar green glow mouse ke saath chalega. Neeche wali candles sirf decorative animation hai, live price ticker upar hai.</p><div class="marquee"><span>DISCIPLINE • TRADE JOURNAL • RITIK • GOLD • FOREX •&nbsp;</span><span>DISCIPLINE • TRADE JOURNAL • RITIK • GOLD • FOREX •&nbsp;</span></div><div class="candle-strip" aria-hidden="true"><i style="--h:42%"></i><i style="--h:68%"></i><i style="--h:30%"></i><i style="--h:82%"></i><i style="--h:55%"></i><i style="--h:92%"></i><i style="--h:38%"></i><i style="--h:74%"></i><i style="--h:60%"></i><i style="--h:88%"></i><i style="--h:48%"></i><i style="--h:70%"></i></div></section>
 <section><h2>📈 Market Ticker — Live (TradingView)</h2><div class="tradingview-widget-container"><div class="tradingview-widget-container__widget"></div><script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>{"symbols":[{"proName":"OANDA:XAUUSD","title":"Gold"},{"proName":"OANDA:XAGUSD","title":"Silver"},{"proName":"FX:EURUSD","title":"EUR/USD"},{"proName":"FX:GBPUSD","title":"GBP/USD"},{"proName":"FX:USDJPY","title":"USD/JPY"}],"colorTheme":"dark","isTransparent":true,"displayMode":"adaptive","locale":"en"}</script></div><p class="small">Ye ticker TradingView ka real live data hai, koi demo price nahi hai.</p></section>
 <section><h2>Dashboard — Overview</h2><div class="cards" id="dashStats"></div><p class="small">Ye tumhare journal ke trades se banta hai, koi broker data nahi hai.</p></section>
 <section><h2>Monthly P&amp;L Calendar (this month, daily Net R)</h2><div id="dashCalendar"></div></section>
@@ -157,6 +158,18 @@ section:nth-child(2){animation-delay:.08s}.card{transition:transform .25s ease,b
 nav button.active,.btn.primary{background-size:200% 100%;animation:floatGlow 6s ease-in-out infinite,pulseGlow 3s ease-in-out infinite}
 h1{background-size:200% 100%;animation:floatGlow 8s ease-in-out infinite}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* Video-style animations: marquee, green candles, mouse glow, scroll reveal */
+.marquee{overflow:hidden;white-space:nowrap;font-size:26px;font-weight:800;color:#4ade80;margin:12px 0}
+.marquee span{display:inline-block;animation:marqueeMove 18s linear infinite}
+@keyframes marqueeMove{from{transform:translateX(0)}to{transform:translateX(-100%)}}
+.candle-strip{display:flex;align-items:flex-end;gap:8px;height:90px;margin-top:10px}
+.candle-strip i{display:block;width:14px;height:var(--h);background:linear-gradient(180deg,#4ade80,#14532d);border-radius:4px;animation:candlePulse 2.4s ease-in-out infinite}
+.candle-strip i:nth-child(even){animation-delay:.4s}
+@keyframes candlePulse{0%,100%{transform:scaleY(.7);opacity:.6}50%{transform:scaleY(1);opacity:1}}
+#mouseGlow{position:fixed;width:420px;height:420px;border-radius:50%;pointer-events:none;z-index:1;background:radial-gradient(circle,rgba(74,222,128,.14),transparent 60%);transform:translate(-50%,-50%);left:50%;top:30%}
+section.reveal{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease}
+section.reveal.visible{opacity:1;transform:none}
 </style>
 <section style="margin-top:14px"><h2>AI News Analysis — Gold aur Pairs ke liye</h2>
 <p class="small"><b>Important:</b> Ye analysis rule-based hai, koi real AI model ya price prediction nahi hai. Ye batata hai ki news aam taur par kis pair ke liye positive / negative maani jaati hai, aur gold par kis taraf pressure ban sakta hai. Ye trading advice nahi hai, aur pump / dump ki guarantee nahi deta. Asli price actual data aane ke baad hi react karta hai.</p>
@@ -227,5 +240,19 @@ document.addEventListener('click', function(e){
   if(e.target.closest('button, .btn, .dd-opt, .dd-btn, nav button')) playClick();
 });
 (function(){var b=document.getElementById('soundToggle'); if(b && !clickOn) b.textContent='🔇 Click Sound: Off';})();
+</script>
+
+<script>
+var glow=document.createElement('div');glow.id='mouseGlow';document.body.appendChild(glow);
+document.addEventListener('mousemove',function(e){glow.style.left=e.clientX+'px';glow.style.top=e.clientY+'px';});
+var io=new IntersectionObserver(function(es){es.forEach(function(en){if(en.isIntersecting)en.target.classList.add('visible');});},{threshold:.12});
+document.querySelectorAll('section').forEach(function(s){s.classList.add('reveal');io.observe(s);});
+function countUp(el){
+  var target=parseFloat(el.textContent.replace(/[^0-9.]/g,'')); if(isNaN(target)||target===0)return;
+  var start=0, t0=null;
+  function step(ts){if(!t0)t0=ts;var pr=Math.min(1,(ts-t0)/900);el.textContent=Math.round(start+(target-start)*pr);if(pr<1)requestAnimationFrame(step);}requestAnimationFrame(step);
+}
+var cio=new IntersectionObserver(function(es){es.forEach(function(en){if(en.isIntersecting){en.target.querySelectorAll('.card b').forEach(countUp);cio.unobserve(en.target);}});},{threshold:.3});
+document.querySelectorAll('.cards').forEach(function(c){cio.observe(c);});
 </script>
 </body></html>
