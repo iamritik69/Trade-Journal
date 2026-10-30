@@ -184,6 +184,15 @@ async function loadNews(force = false): Promise<void> {
   const box = $("news");
   if (!force) { try { const cached = JSON.parse(localStorage.getItem("ritik_news_cache") || "null"); if (cached && Date.now() - cached.at < 3600000 && Array.isArray(cached.events)) { renderNewsEvents(cached.events); return; } } catch { /* ignore cache */ } }
   box.textContent = "Loading… (fast mode: sab sources ek saath try ho rahe hain)";
+  try {
+    const snap = await fetchJson("news.json");
+    if (Array.isArray(snap)) {
+      try { localStorage.setItem("ritik_news_cache", JSON.stringify({ at: Date.now(), events: snap })); } catch { /* cache optional */ }
+      renderNewsEvents(snap as Record<string, unknown>[]);
+      box.insertAdjacentHTML("afterbegin", "<p class=\"small\">Note: ye list is hafte ka saved snapshot hai (26 Oct – 1 Nov 2026), kyunki Forex Factory ka live feed browser se CORS ki wajah se block hai. Live calendar upar TradingView widget me chal raha hai.</p>");
+      return;
+    }
+  } catch { /* fall through to live sources */ }
   const urls = [
     "https://nfs.faireconomy.media/ff_calendar_thisweek.json",
     "https://api.codetabs.com/v1/proxy?quest=https://nfs.faireconomy.media/ff_calendar_thisweek.json",
