@@ -42,6 +42,7 @@ html,body{max-width:100%;overflow-x:hidden}section{overflow-wrap:break-word}
 <button data-tab="analytics" onclick="showTab('analytics',this)">📊 Analysis</button>
 <button data-tab="news" onclick="showTab('news',this)">📰 News</button>
 <button data-tab="chart" onclick="showTab('chart',this)">📈 Chart</button>
+<button data-tab="jadu" onclick="showTab('jadu',this);renderJaduChart()">✨ JADU Chart</button>
 <button data-tab="tools" onclick="showTab('tools',this)">🧰 Tools</button>
 </nav>
 <main>
@@ -147,6 +148,13 @@ html,body{max-width:100%;overflow-x:hidden}section{overflow-wrap:break-word}
 <p class="small"><b>24/7 wali sachai:</b> TradingView ka free embed widget community Pine script ko site ke code se permanently pin nahi kar sakta, ye TradingView ki limit hai. Isliye is site ke chart me JADU-TONA har baar khud se nahi aayega. Permanent tareeqa: upar wale link se TradingView par chart kholo, Indicators me JADU-TONA search karke Add karo, phir apne TradingView account me chart layout Save karo, to TradingView par kholne par wo hamesha laga milega. Is site ke chart me Indicators button se bhi usi session ke liye add kar sakte ho, par reload par hat sakta hai.</p>
 <p class="small">Steps: Chart tab me Load live chart dabao → chart ke upar Indicators dabao → "JADU-TONA" search karo → trades-by-rm wala select karo → Settings me FVG / Order Blocks / Kill Zones on karna ho to on karo, warna default settings hi theek hain.</p></section>
 </div>
+<div id="tab-jadu" style="display:none">
+<section><h2>JADU Chart — Custom JS (v1, simplified port)</h2>
+<p class="small"><b>Demo data hai, live gold price nahi hai.</b> Ye chart tumhare JADU-TONA logic ka JS version hai: EMA 132, swing highs/lows, BOS / CHOCH markers, last swing levels, FVG list, Kill Zone times IST me. Poora Pine (ISS, D-CHOCH, MTF dashboard, Level Analyzer) abhi isme nahi hai, kyunki poora Pine code chat me adhoora aaya tha. Live price ke liye apni free API key (jaise TwelveData) ya OHLC CSV baad me jodenge.</p>
+<div id="jaduChartBox" style="width:100%;height:520px"></div>
+<div id="jaduInfo"></div>
+<p class="small">Chart library: Lightweight Charts (MIT, CDN se). Ye TradingView widget nahi hai, isliye isme TradingView ka Pine engine nahi chalta, logic JS me likha gaya hai.</p></section>
+</div>
 <div id="tab-tools" style="display:none">
 <section><h2>Risk / position-size calculator — live</h2>
 <div class="row"><div><label>Account size ($) <input type="number" id="acc" value="10000"></label></div>
@@ -168,5 +176,7 @@ html,body{max-width:100%;overflow-x:hidden}section{overflow-wrap:break-word}
 </main>
 <footer>RITIK • DISCIPLINE IS THE ENGINE</footer>
 <div id="lockScreen" style="display:none;position:fixed;inset:0;background:#0b0f1a;z-index:99;text-align:center;padding-top:30vh"><h2>Trade Journal locked</h2><p>Enter PIN</p><input type="password" id="pinIn" style="max-width:240px"><br><br><button class="btn primary" onclick="unlock()">Unlock</button></div>
-<script src="app.js?v=jadu2"></script>
+<script src="https://unpkg.com/lightweight-charts@4.2.0/dist/lightweight-charts.standalone.production.js"></script>
+<script src="jadu-chart.js"></script>
+<script src="app.js?v=jadu3"></script>
 </body></html>
