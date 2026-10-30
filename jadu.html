@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>JADU Chart — RITIK Trade Journal</title>
+<style>*{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,system-ui,Segoe UI,Roboto,sans-serif;background:#0b0f1a;color:#f2f5ff;padding:16px}h1{font-size:24px}h1 span{color:#f5b301}a{color:#f5b301}.small{color:#9aa7c7;font-size:13px}section{background:#141d33;border:1px solid #2a3a5e;border-radius:20px;padding:18px;margin-top:14px}</style></head><body>
+<h1>RITIK <span>/</span> JADU CHART</h1>
+<p>Permanent address: is page ko bookmark kar lo, har baar khologe to JADU logic site ke code se hi chalega, ek baar wala manual add nahi hai.</p>
+<p><a href="https://iamritik69.github.io/Trade-Journal/">← Back to Trade Journal</a> • <a href="https://www.tradingview.com/script/IOFDitMf-JADU-TONA/" target="_blank" rel="noopener">Full JADU-TONA on TradingView</a></p>
+<section><h2>JADU Chart — Custom JS (v1, simplified port)</h2>
+<p class="small"><b>Demo data hai, live gold price nahi hai.</b> EMA 132, swing highs/lows, BOS / CHOCH markers, last swing levels, FVG list, Kill Zone times IST me. Poora Pine (ISS, D-CHOCH, MTF dashboard, Level Analyzer) abhi isme nahi hai. Live price ke liye apni free API key ya OHLC CSV baad me jodenge. Ye TradingView widget nahi hai, logic JS me likha gaya hai.</p>
+<div id="jaduChartBox" style="width:100%;height:520px"></div>
+<div id="jaduInfo"></div></section>
+<script src="https://unpkg.com/lightweight-charts@4.2.0/dist/lightweight-charts.standalone.production.js"></script>
+<script src="jadu-chart.js"></script>
+<script>window.addEventListener('load', function(){ if (window.renderJaduChart) window.renderJaduChart(); });</script>
+</body></html>
