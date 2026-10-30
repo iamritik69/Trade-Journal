@@ -41,8 +41,6 @@ html,body{max-width:100%;overflow-x:hidden}section{overflow-wrap:break-word}
 <button data-tab="journal" onclick="showTab('journal',this)">📓 Journal</button>
 <button data-tab="analytics" onclick="showTab('analytics',this)">📊 Analysis</button>
 <button data-tab="news" onclick="showTab('news',this)">📰 News</button>
-<button data-tab="chart" onclick="showTab('chart',this)">📈 Chart</button>
-<button data-tab="livegold" onclick="showTab('livegold',this);loadLiveGold()">💰 Live Gold</button>
 <button data-tab="tools" onclick="showTab('tools',this)">🧰 Tools</button>
 </nav>
 <main>
@@ -138,26 +136,6 @@ html,body{max-width:100%;overflow-x:hidden}section{overflow-wrap:break-word}
 <p><a href="https://www.forexfactory.com/calendar" target="_blank" rel="noopener">Open Forex Factory Calendar (source)</a></p>
 <div id="news">Loading…</div></section>
 </div>
-<div id="tab-chart" style="display:none">
-<section><h2>Live Gold Chart — XAUUSD (TradingView)</h2>
-<p><a class="btn" href="https://www.tradingview.com/" target="_blank" rel="noopener">🔐 TradingView Login Kholo</a> <a class="btn" href="https://www.tradingview.com/script/IOFDitMf-JADU-TONA/" target="_blank" rel="noopener">JADU-TONA Laga Hua Chart Kholo (TradingView)</a> <button class="btn" onclick="loadChart()">Load live chart</button></p>
-<p class="small">Pehle TradingView me apne account se login karo, phir upar wale button se script page kholo aur <b>Add to chart / Use on chart</b> dabao, to real XAUUSD chart par JADU-TONA lag jayega. Phir chart ke upar <b>Save</b> dabao, to wo tumhare account me hamesha laga rahega. Site ke andar wale widget me ye option TradingView ki taraf se hi aata hai, site ke code se usme Pine script pehle se pin nahi ho sakta, isliye ye button hi asli laga hua version kholta hai.</p>
-<div id="tvChart"></div>
-<p class="small">Live chart TradingView se aata hai. Agar chart load na ho to internet / TradingView block check karo, ye site ka data nahi hai.</p>
-<h3>JADU-TONA Indicator (trades-by-rm)</h3>
-<p class="small">Price action indicator: CH/CL swings, BOS, CHOCH, TJL1/TJL2, QML, SBR, RBS, DT, DB, ISS levels, EMA 132, FVG / Order Blocks (option), Kill Zone shading, MTF Trend Dashboard. Open-source, free, invite-only nahi hai.</p>
-<p><a class="btn primary" href="https://www.tradingview.com/script/IOFDitMf-JADU-TONA/" target="_blank" rel="noopener" style="text-decoration:none;display:inline-block">Open JADU-TONA on TradingView</a></p>
-<p class="small"><b>24/7 wali sachai:</b> TradingView ka free embed widget community Pine script ko site ke code se permanently pin nahi kar sakta, ye TradingView ki limit hai. Isliye is site ke chart me JADU-TONA har baar khud se nahi aayega. Permanent tareeqa: upar wale link se TradingView par chart kholo, Indicators me JADU-TONA search karke Add karo, phir apne TradingView account me chart layout Save karo, to TradingView par kholne par wo hamesha laga milega. Is site ke chart me Indicators button se bhi usi session ke liye add kar sakte ho, par reload par hat sakta hai.</p>
-<p class="small">Steps: Chart tab me Load live chart dabao → chart ke upar Indicators dabao → "JADU-TONA" search karo → trades-by-rm wala select karo → Settings me FVG / Order Blocks / Kill Zones on karna ho to on karo, warna default settings hi theek hain.</p></section>
-</div>
-<div id="tab-livegold" style="display:none">
-<section><h2>Live Gold — Real Spot Price (API)</h2>
-<p id="liveGoldPrice">Loading live price...</p>
-<p><button class="btn" onclick="loadLiveGold()">Refresh live price</button></p>
-<div id="liveGoldChartBox" style="width:100%;height:300px"></div>
-<p class="small"><b>Real hai, demo nahi:</b> har point api.gold-api.com se live aata hai, bina API key ke. <b>Limit:</b> ye free API sirf current spot price deta hai, pichli candles ka history nahi deta, isliye line chart tab kholne ke baad point by point banta hai, pehle se bhara hua history chart nahi hai. Swing / BOS / CHOCH / TJL-QML levels ke liye pichli candles chahiye, wo levels real TradingView chart (Live Chart tab) par JADU-TONA indicator me hi milenge, is spot API se nahi ban sakte. Spot price TradingView ke OANDA XAUUSD se thoda alag ho sakta hai, kyunki source alag hai.</p>
-<p class="small"><b>Levels:</b> agar tumhe JADU wale TJL / QML / SBR / RBS levels chahiye, to wo Live Chart tab me TradingView indicator se hi milenge. Bata do kaunse levels chahiye, to main wahi section saaf karke dikha dunga, bina fake levels banaye.</p></section>
-</div>
 <div id="tab-tools" style="display:none">
 <section><h2>Risk / position-size calculator — live</h2>
 <div class="row"><div><label>Account size ($) <input type="number" id="acc" value="10000"></label></div>
@@ -182,7 +160,7 @@ html,body{max-width:100%;overflow-x:hidden}section{overflow-wrap:break-word}
 <script src="https://unpkg.com/lightweight-charts@4.2.0/dist/lightweight-charts.standalone.production.js"></script>
 <script src="live-gold.js"></script>
 <script>function glassPriceFetch(){fetch('https://api.gold-api.com/price/XAU').then(function(r){return r.json()}).then(function(j){var e=document.getElementById('glassPrice');if(e)e.innerHTML='💰 Live Gold: $'+Number(j.price).toFixed(2)+' • '+new Date(j.updatedAt||Date.now()).toLocaleString('en-IN',{timeZone:'Asia/Kolkata',hour12:true})+' IST';}).catch(function(){});}glassPriceFetch();setInterval(glassPriceFetch,30000);</script>
-<script src="app.js?v=glass1"></script>
+<script src="app.js?v=notickerchart1"></script>
 
 <script>
 // iOS-style click sound, synthesized in-browser (no Apple audio file copied).
