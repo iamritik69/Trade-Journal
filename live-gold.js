@@ -16,7 +16,7 @@
       var price = Number(j.price);
       var box = document.getElementById('liveGoldBox');
       if (box) box.dataset.loaded = '1';
-      if (el) el.innerHTML = 'XAU / USD (spot): <b>$' + price.toFixed(2) + '</b> • Updated: ' + ist(new Date(j.updatedAt || Date.now())) + ' IST • Source: api.gold-api.com (free, no key)';
+      if (el) el.innerHTML = 'XAU / USD (spot): <b>$' + price.toFixed(2) + '</b> • Updated: ' + ist(new Date(j.updatedAt || Date.now())) + ' IST • Source: api.gold-api.com (free, no key)'; var gp = document.getElementById('glassPrice'); if (gp) gp.innerHTML = '💰 Live Gold: $' + price.toFixed(2) + ' • ' + ist(new Date(j.updatedAt || Date.now())) + ' IST';
       if (series) {
         var t = Math.floor(Date.now() / 1000);
         if (t !== last) { series.update({ time: t, value: price }); last = t; }
