@@ -310,6 +310,12 @@ async function loadNews(force = false) {
     catch { /* cache optional */ }
     renderNewsEvents(raw);
 }
+function formatIST12(dateStr) {
+    const d = new Date(dateStr);
+    const parts = new Intl.DateTimeFormat("en-US", { timeZone: "Asia/Kolkata", day: "2-digit", month: "short", hour: "numeric", minute: "2-digit", hour12: true }).formatToParts(d);
+    const get = (t) => parts.find((p) => p.type === t)?.value || "";
+    return `${get("day")} ${get("month")}, ${get("hour")}:${get("minute")} ${get("dayPeriod").toUpperCase()} IST`;
+}
 function renderNewsEvents(rawArr) {
     let ev = rawArr.map((e) => ({ title: String(e.title || ""), currency: String(e.country || e.currency || ""), date: String(e.date || ""), impact: String(e.impact || ""), forecast: String(e.forecast || ""), previous: String(e.previous || "") })).filter((e) => ["USD", "EUR", "GBP"].includes(e.currency));
     if ($("highOnly").checked)
@@ -317,7 +323,7 @@ function renderNewsEvents(rawArr) {
     ev.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
     analyzeNews(ev);
     const now = new Date();
-    $("news").innerHTML = ev.map((e) => { const d = new Date(e.date); return `<p><b>${d.toLocaleString("en-IN", { timeZone: "Asia/Kolkata", day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit", hour12: true })} IST</b> • ${esc(e.currency)} • ${esc(e.impact)} • ${esc(e.title)} • Forecast: ${esc(e.forecast || "—")} • Previous: ${esc(e.previous || "—")} ${d < now ? '<span class="small">(past)</span>' : ""}</p>`; }).join("") || "<p>No events match this filter this week.</p>";
+    $("news").innerHTML = ev.map((e) => { const d = new Date(e.date); return `<p><b>${formatIST12(e.date)}</b> • ${esc(e.currency)} • ${esc(e.impact)} • ${esc(e.title)} • Forecast: ${esc(e.forecast || "—")} • Previous: ${esc(e.previous || "—")} ${d < now ? '<span class="small">(past)</span>' : ""}</p>`; }).join("") || "<p>No events match this filter this week.</p>";
 }
 window.loadNews = loadNews;
 function goldBiasFor(e) {
