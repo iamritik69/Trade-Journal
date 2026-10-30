@@ -34,6 +34,16 @@ table{width:100%;border-collapse:collapse;font-size:14px}th,td{padding:9px;borde
 footer{text-align:center;color:#9aa7c7;padding:20px}
 @media(max-width:600px){h1{font-size:24px}.cards{grid-template-columns:repeat(2,1fr)}.row{grid-template-columns:1fr}main{padding:8px 10px 44px}section{padding:14px 12px;overflow-wrap:break-word}h2{font-size:20px;overflow-wrap:break-word}p,li,td{overflow-wrap:break-word;word-break:break-word}table{font-size:13px}}
 html,body{max-width:100%;overflow-x:hidden}section{overflow-wrap:break-word}
+
+/* Y2K upgrade: chrome typography, holographic accents, bubble forms */
+h1{background:linear-gradient(180deg,#ffffff 0%,#d7dde8 35%,#8f9bb0 50%,#e8edf5 55%,#aab4c8 100%);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:0 0 24px rgba(255,255,255,.15)}
+h1 span{background:linear-gradient(180deg,#fff7cc,#f5b301,#ff7a18);-webkit-background-clip:text;background-clip:text;color:transparent}
+section{position:relative}
+section::before{content:"";position:absolute;left:18px;right:18px;top:0;height:2px;border-radius:99px;background:linear-gradient(90deg,transparent,#ff5ea8,#7c5cff,#00e5ff,#f5b301,transparent);opacity:.8}
+.card{border-radius:28px;background:linear-gradient(135deg,rgba(255,255,255,.14),rgba(255,255,255,.04) 55%,rgba(255,94,168,.08))}
+nav button.active,.btn.primary{background:linear-gradient(135deg,#e8edf5,#f5b301 55%,#ff5ea8);box-shadow:0 8px 24px rgba(255,94,168,.30)}
+nav{border-radius:28px}
+#glassPrice{background:linear-gradient(90deg,rgba(255,255,255,.12),rgba(255,94,168,.12),rgba(0,229,255,.12))!important}
 </style></head><body>
 <header><h1>RITIK <span>/</span> TRADE JOURNAL</h1><p id="glassPrice" class="small" style="background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:8px 14px;display:inline-block">💰 Live Gold: loading...</p><p>RITIK • DISCIPLINE IS THE ENGINE • Times shown in IST (UTC+05:30, Kolkata) • TypeScript build</p><button class="btn" id="soundToggle" onclick="toggleClickSound()">🔊 Click Sound: On</button> <button class="btn" id="sideToggle" onclick="document.body.classList.toggle('sidebar-collapsed')">☰ Sidebar slide karo / wapas lao</button></header>
 <nav>
@@ -119,7 +129,17 @@ html,body{max-width:100%;overflow-x:hidden}section{overflow-wrap:break-word}
 <div id="tvCalendar"></div></div>
 
 </div>
-<style>@media(min-width:900px){#newsGrid{grid-template-columns:1fr 1fr}}</style>
+<style>@media(min-width:900px){#newsGrid{grid-template-columns:1fr 1fr}}
+/* Y2K upgrade: chrome typography, holographic accents, bubble forms */
+h1{background:linear-gradient(180deg,#ffffff 0%,#d7dde8 35%,#8f9bb0 50%,#e8edf5 55%,#aab4c8 100%);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:0 0 24px rgba(255,255,255,.15)}
+h1 span{background:linear-gradient(180deg,#fff7cc,#f5b301,#ff7a18);-webkit-background-clip:text;background-clip:text;color:transparent}
+section{position:relative}
+section::before{content:"";position:absolute;left:18px;right:18px;top:0;height:2px;border-radius:99px;background:linear-gradient(90deg,transparent,#ff5ea8,#7c5cff,#00e5ff,#f5b301,transparent);opacity:.8}
+.card{border-radius:28px;background:linear-gradient(135deg,rgba(255,255,255,.14),rgba(255,255,255,.04) 55%,rgba(255,94,168,.08))}
+nav button.active,.btn.primary{background:linear-gradient(135deg,#e8edf5,#f5b301 55%,#ff5ea8);box-shadow:0 8px 24px rgba(255,94,168,.30)}
+nav{border-radius:28px}
+#glassPrice{background:linear-gradient(90deg,rgba(255,255,255,.12),rgba(255,94,168,.12),rgba(0,229,255,.12))!important}
+</style>
 <section style="margin-top:14px"><h2>AI News Analysis — Gold aur Pairs ke liye</h2>
 <p class="small"><b>Important:</b> Ye analysis rule-based hai, koi real AI model ya price prediction nahi hai. Ye batata hai ki news aam taur par kis pair ke liye positive / negative maani jaati hai, aur gold par kis taraf pressure ban sakta hai. Ye trading advice nahi hai, aur pump / dump ki guarantee nahi deta. Asli price actual data aane ke baad hi react karta hai.</p>
 <div id="aiNews">News load hote hi analysis yahan aayega. Agar feed fail ho to neeche manual tool use karo.</div>
