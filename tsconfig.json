@@ -1,0 +1,1 @@
+{"compilerOptions":{"module":"none","noEmitOnError":true,"outFile":"app.js","skipLibCheck":true,"strict":false,"target":"ES2020"},"include":["src/app.ts"]}

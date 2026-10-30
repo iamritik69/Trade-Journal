@@ -2,24 +2,36 @@
 <html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>RITIK — Trade Journal</title>
 <style>
-*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:#0f1420;color:#eef2ff}
-header{padding:18px 16px 8px;max-width:1100px;margin:auto}h1{margin:0;font-size:26px;letter-spacing:.5px}header p{color:#9aa7c7;margin:6px 0}
-nav{max-width:1100px;margin:10px auto;padding:0 16px;display:flex;gap:8px;flex-wrap:wrap}
-nav button,.btn{background:#1e2a4a;color:#fff;border:1px solid #33456e;border-radius:10px;padding:9px 14px;cursor:pointer}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,Segoe UI,Roboto,sans-serif;background:#0b0f1a;color:#f2f5ff}
+header{padding:22px 16px 6px;max-width:1100px;margin:auto}h1{margin:0;font-size:30px;letter-spacing:.4px}h1 span{color:#f5b301}header p{color:#9aa7c7;margin:8px 0}
+nav{max-width:1100px;margin:12px auto;padding:0 16px;display:flex;gap:8px;flex-wrap:wrap;position:sticky;top:0;z-index:20;background:#0b0f1acc;backdrop-filter:blur(12px);padding-top:10px;padding-bottom:10px}
+nav button,.btn{background:#1c2742;color:#fff;border:1px solid #33456e;border-radius:999px;padding:10px 16px;cursor:pointer;font-size:15px}
 nav button.active,.btn.primary{background:#f5b301;color:#111;border-color:#f5b301;font-weight:700}
-main{max-width:1100px;margin:auto;padding:8px 16px 40px}
-.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
-.card{background:#182238;border:1px solid #2a3a5e;border-radius:14px;padding:12px}.card b{font-size:22px;display:block}.card span{color:#9aa7c7;font-size:13px}
-section{background:#141d33;border:1px solid #2a3a5e;border-radius:16px;padding:16px;margin-top:14px}
-label{display:block;font-size:13px;color:#c6d0ea;margin-top:10px}input,select,textarea{width:100%;padding:9px;border-radius:9px;border:1px solid #33456e;background:#0f172a;color:#fff;margin-top:4px}
-.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
-table{width:100%;border-collapse:collapse;font-size:14px}th,td{padding:8px;border-bottom:1px solid #2a3a5e;text-align:left;vertical-align:top}
+main{max-width:1100px;margin:auto;padding:8px 16px 44px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
+.card{background:linear-gradient(180deg,#1a2440,#141d33);border:1px solid #2a3a5e;border-radius:18px;padding:14px;box-shadow:0 6px 20px rgba(0,0,0,.25)}.card b{font-size:22px;display:block}.card span{color:#9aa7c7;font-size:12px;letter-spacing:.6px}
+section{background:#141d33;border:1px solid #2a3a5e;border-radius:20px;padding:18px;margin-top:14px}
+label{display:block;font-size:13px;color:#c6d0ea;margin-top:12px}input,textarea{width:100%;padding:11px;border-radius:12px;border:1px solid #33456e;background:#0f172a;color:#fff;margin-top:5px;font-size:15px}
+.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+table{width:100%;border-collapse:collapse;font-size:14px}th,td{padding:9px;border-bottom:1px solid #2a3a5e;text-align:left;vertical-align:top}
 .small{color:#9aa7c7;font-size:13px}.win{color:#4ade80}.loss{color:#f87171}
-.day{display:inline-block;width:34px;height:34px;line-height:34px;text-align:center;border-radius:8px;margin:2px;font-size:12px;background:#1e2a4a}
+.day{display:inline-block;width:36px;height:36px;line-height:36px;text-align:center;border-radius:10px;margin:2px;font-size:12px;background:#1e2a4a}
 .day.pos{background:#14532d}.day.neg{background:#7f1d1d}
+.check{display:flex;align-items:center;gap:10px;margin-top:10px;color:#eef2ff}.check input{width:20px;height:20px;margin:0;flex:none}
+/* iPhone-style dropdown */
+.ios-dd{position:relative;margin-top:5px}.dd-btn{width:100%;display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-radius:14px;border:1px solid #33456e;background:#0f172a;color:#fff;font-size:15px;cursor:pointer}
+.dd-chev{color:#f5b301;font-size:20px}
+.dd-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.5);backdrop-filter:blur(3px);display:none;z-index:40}
+.dd-backdrop.open{display:block}
+.dd-sheet{display:none;z-index:50;background:#1c2742;border:1px solid #33456e;border-radius:20px;padding:8px;box-shadow:0 20px 50px rgba(0,0,0,.5)}
+.dd-sheet.open{display:block}
+@media(min-width:700px){.dd-sheet{position:absolute;left:0;right:0;top:calc(100% + 6px)}}
+@media(max-width:699px){.dd-sheet{position:fixed;left:12px;right:12px;bottom:12px;max-height:55vh;overflow:auto}}
+.dd-opt{width:100%;display:flex;justify-content:space-between;padding:13px 12px;background:transparent;border:0;border-bottom:1px solid #2a3a5e;color:#fff;font-size:16px;cursor:pointer;text-align:left}.dd-opt.sel{color:#f5b301;font-weight:700}
 footer{text-align:center;color:#9aa7c7;padding:20px}
+@media(max-width:600px){h1{font-size:24px}.cards{grid-template-columns:repeat(2,1fr)}}
 </style></head><body>
-<header><h1>RITIK / TRADE JOURNAL</h1><p>RITIK • DISCIPLINE IS THE ENGINE • Times shown in IST (UTC+05:30, Kolkata)</p></header>
+<header><h1>RITIK <span>/</span> TRADE JOURNAL</h1><p>RITIK • DISCIPLINE IS THE ENGINE • Times shown in IST (UTC+05:30, Kolkata) • TypeScript build</p></header>
 <nav>
 <button data-tab="journal" class="active" onclick="showTab('journal',this)">Journal</button>
 <button data-tab="analytics" onclick="showTab('analytics',this)">Analytics</button>
@@ -28,150 +40,80 @@ footer{text-align:center;color:#9aa7c7;padding:20px}
 </nav>
 <main>
 <div class="cards" id="stats"></div>
-
 <div id="tab-journal">
 <section><h2>Session reminders (IST)</h2><p id="reminders" class="small">Loading countdowns…</p>
-<p class="small">London session: 1:30 PM – 10:30 PM IST. New York session: from 2 Nov 2026, 6:30 PM – 3:30 AM IST (before that 5:30 PM – 2:30 AM IST). Asia: 5:30 AM – 2:30 PM IST. These are published session windows, not exchange-verified times.</p></section>
-
+<p class="small">London: 1:30 PM – 10:30 PM IST. New York: from 2 Nov 2026, 6:30 PM – 3:30 AM IST. Asia: 5:30 AM – 2:30 PM IST.</p></section>
 <section><h2>Pre-trade checklist</h2>
-<label><input type="checkbox" id="c1"> Kill zone / session confirmed</label>
-<label><input type="checkbox" id="c2"> Level confirmed (QML / TJL)</label>
-<label><input type="checkbox" id="c3"> Risk is within my limit (0.25–0.5% per trade)</label>
-<label><input type="checkbox" id="c4"> Stop-loss and outcome plan decided before entry</label>
+<label class="check"><input type="checkbox" id="c1"><span>Kill zone / session confirmed</span></label>
+<label class="check"><input type="checkbox" id="c2"><span>Level confirmed (QML / TJL)</span></label>
+<label class="check"><input type="checkbox" id="c3"><span>Risk is within my limit (0.25–0.5% per trade)</span></label>
+<label class="check"><input type="checkbox" id="c4"><span>Stop-loss and outcome plan decided before entry</span></label>
 <p class="small">Checked items are saved with the next entry you add.</p></section>
-
 <section><h2>NAYI ENTRY</h2><form id="entryForm">
 <div class="row">
 <div><label>Date<input type="date" id="fDate" required></label></div>
-<div><label>Pair<select id="fPair"><option>XAUUSD</option><option>EURUSD</option><option>GBPUSD</option><option>USDJPY</option><option>GBPJPY</option><option>EURGBP</option></select></label></div>
-<div><label>Session<select id="fSession"><option>Asian</option><option>London</option><option>New York</option><option>Out of Zone</option></select></label></div>
-<div><label>Direction<select id="fDir"><option>Buy</option><option>Sell</option></select></label></div>
-<div><label>Level timeframe<select id="fTf"><option>15m</option><option>1H</option><option>4H</option><option>Daily</option></select></label></div>
-<div><label>Level<select id="fLevel"><option>QML A+</option><option>TJL-1</option><option>QML</option><option>TJL</option><option>Other</option></select></label></div>
-<div><label>Entry module<input id="fModule" placeholder="e.g. Break & retest"></label></div>
+<div><label>Pair</label><div class="ios-dd" data-field="pair" data-options="XAUUSD,EURUSD,GBPUSD,USDJPY,GBPJPY,EURGBP" data-value="XAUUSD"></div></div>
+<div><label>Session</label><div class="ios-dd" data-field="session" data-options="Asian,London,New York,Out of Zone" data-value="Asian"></div></div>
+<div><label>Direction</label><div class="ios-dd" data-field="dir" data-options="Buy,Sell" data-value="Buy"></div></div>
+<div><label>Level timeframe</label><div class="ios-dd" data-field="tf" data-options="15m,1H,4H,Daily" data-value="15m"></div></div>
+<div><label>Level</label><div class="ios-dd" data-field="level" data-options="QML A+,TJL-1,QML,TJL,Other" data-value="QML A+"></div></div>
+<div><label>Entry module<input id="fModule" placeholder="e.g. Break &amp; retest"></label></div>
 <div><label>Risk %<input type="number" step="0.01" id="fRisk" value="0.5"></label></div>
 <div><label>Stop-loss (pips)<input type="number" step="0.1" id="fSl"></label></div>
 <div><label>Result (R)<input type="number" step="0.01" id="fR" required placeholder="e.g. 2, -1, 0"></label></div>
-<div><label>Outcome<select id="fOut"><option>TP</option><option>SL</option><option>BE</option><option>Partial</option><option>Not Taken</option></select></label></div>
+<div><label>Outcome</label><div class="ios-dd" data-field="outcome" data-options="TP,SL,BE,Partial,Not Taken" data-value="TP"></div></div>
 </div>
 <label>Ek Seekh (lesson)<input id="fLesson" placeholder="One lesson from this trade"></label>
 <label>Description (optional)<textarea id="fDesc" rows="3"></textarea></label>
 <label>Screenshots (optional, up to 10, stored only in this browser)<input type="file" id="fImg" accept="image/*" multiple></label>
-<button class="btn primary" type="submit" style="margin-top:12px">Save entry</button>
+<button class="btn primary" type="submit" style="margin-top:14px">Save entry</button>
 </form></section>
-
 <section><h2>HISTORY</h2>
-<div class="row"><div><label>Search<input id="q" placeholder="Pair, lesson, level…" oninput="render()"></label></div>
-<div><label>Session filter<select id="qSession" onchange="render()"><option value="">All sessions</option><option>Asian</option><option>London</option><option>New York</option><option>Out of Zone</option></select></label></div></div>
+<div class="row"><div><label>Search<input id="q" placeholder="Pair, lesson, level…"></label></div>
+<div><label>Session filter</label><div class="ios-dd" data-field="qSession" data-options="Asian,London,New York,Out of Zone" data-value=""></div></div></div>
+<p class="small">Filter me "All" ka matlab koi filter nahi hai.</p>
 <p style="margin-top:12px"><button class="btn" onclick="backup()">Backup (JSON)</button> <label class="btn" style="display:inline-block">Restore (JSON) <input type="file" accept=".json" hidden onchange="restore(this.files[0])"></label> <button class="btn" onclick="exportCsv()">Export CSV</button></p>
 <div style="overflow:auto"><table><thead><tr><th>Date</th><th>Pair / Session</th><th>Dir / Level</th><th>Risk / R</th><th>Outcome</th><th>Lesson</th><th></th></tr></thead><tbody id="history"></tbody></table></div>
 <p class="small">Entries are saved only in this browser (localStorage) unless you use Backup. This page does not send your trades to a server.</p></section>
 </div>
-
 <div id="tab-analytics" style="display:none">
-<section><h2>Equity curve (Net R)</h2><canvas id="curve" width="1000" height="280" style="width:100%;background:#0f172a;border-radius:12px"></canvas>
-<p id="advStats"></p></section>
+<section><h2>Equity curve (Net R)</h2><canvas id="curve" width="1000" height="280" style="width:100%;background:#0f172a;border-radius:12px"></canvas><p id="advStats"></p>
+<p><button class="btn" onclick="printReport()">Print / Save report as PDF</button></p></section>
+<section><h2>Analytics filters</h2><div class="row"><div><label>Pair filter</label><div class="ios-dd" data-field="aPair" data-options="XAUUSD,EURUSD,GBPUSD,USDJPY,GBPJPY,EURGBP" data-value=""></div></div>
+<div><label>Session filter</label><div class="ios-dd" data-field="aSession" data-options="Asian,London,New York,Out of Zone" data-value=""></div></div></div>
+<p class="small">Filters apply to breakdowns below. "All" ka matlab sab kuch include hai.</p></section>
 <section><h2>Calendar heatmap (this month, daily Net R)</h2><div id="heatmap"></div></section>
 <section><h2>Breakdowns</h2><div id="breakdowns"></div></section>
-<section><h2>Repeat mistake tracker</h2><p class="small">Lessons repeated word-for-word are counted here. Change the wording and it will count as a new lesson.</p><div id="mistakes"></div></section>
+<section><h2>Repeat mistake tracker</h2><div id="mistakes"></div></section>
 </div>
-
 <div id="tab-news" style="display:none">
 <section><h2>Forex News — Economic Calendar</h2>
-<p class="small">Source: Forex Factory / Faireconomy calendar feed. Times converted to IST. Gold has no separate calendar — watch USD events for XAUUSD. No events are invented here; if the feed fails, use the source link below.</p>
+<p class="small">Source: Forex Factory / Faireconomy calendar feed, tried directly and via CORS proxies. Times converted to IST. Gold has no separate calendar — watch USD events for XAUUSD. No events are invented here.</p>
 <label><input type="checkbox" id="highOnly" onchange="loadNews()"> High-impact only</label>
 <button class="btn" onclick="loadNews()" style="margin-left:8px">Refresh</button>
 <p><a href="https://www.forexfactory.com/calendar" target="_blank" rel="noopener">Open Forex Factory Calendar (source)</a></p>
 <div id="news">Loading…</div></section>
 </div>
-
 <div id="tab-tools" style="display:none">
-<section><h2>Risk / position-size calculator</h2>
+<section><h2>Risk / position-size calculator — live</h2>
 <div class="row"><div><label>Account size ($) <input type="number" id="acc" value="10000"></label></div>
 <div><label>Risk % <input type="number" step="0.01" id="riskPct" value="0.5"></label></div>
 <div><label>Stop-loss (pips) <input type="number" step="0.1" id="slPips" value="20"></label></div></div>
-<p id="calcOut"></p><p class="small">Risk amount = account × risk %. Size per pip = risk amount ÷ SL pips. This is a calculator only, not a broker order — check your broker's lot / pip value before trading.</p></section>
+<p id="calcOut"></p><p class="small">Risk amount = account × risk %. Size per pip = risk amount ÷ SL pips. Calculator only, not a broker order.</p></section>
 <section><h2>Funded challenge tracker (estimate)</h2>
 <div class="row"><div><label>Starting balance ($) <input type="number" id="chStart" value="10000"></label></div>
 <div><label>Profit target % <input type="number" id="chTarget" value="10"></label></div>
 <div><label>Daily drawdown limit % <input type="number" id="chDaily" value="5"></label></div>
 <div><label>Total drawdown limit % <input type="number" id="chTotal" value="10"></label></div></div>
-<p id="chOut"></p><p class="small">Estimated balance compounds journal Risk % × R per trade. It is an estimate from your journal, not your broker / prop-firm balance — always check the firm's dashboard.</p></section>
+<p id="chOut"></p><p class="small">Estimated balance compounds journal Risk % × R per trade. It is an estimate, not your broker / prop-firm balance.</p></section>
 <section><h2>Password lock (optional, this browser only)</h2>
-<p class="small">Set a PIN to gate this page in this browser. Only a SHA-256 hash is stored, not the PIN itself. If you forget it, clear this site's data in your browser — there is no recovery.</p>
+<p class="small">Only a SHA-256 hash is stored, not the PIN. If you forget it, clear this site's data — there is no recovery.</p>
 <label>Set / change PIN<input type="password" id="pinSet"></label>
 <button class="btn" onclick="setPin()">Set PIN</button> <button class="btn" onclick="lockNow()">Lock now</button>
 </section>
 </div>
 </main>
 <footer>RITIK • DISCIPLINE IS THE ENGINE</footer>
-<div id="lockScreen" style="display:none;position:fixed;inset:0;background:#0f1420;z-index:99;text-align:center;padding-top:30vh"><h2>Trade Journal locked</h2><p>Enter PIN</p><input type="password" id="pinIn" style="max-width:240px"><br><br><button class="btn primary" onclick="unlock()">Unlock</button></div>
-<script>
-let trades=JSON.parse(localStorage.getItem('ritik_trades')||'[]');
-function save(){localStorage.setItem('ritik_trades',JSON.stringify(trades));}
-function showTab(id,btn){['journal','analytics','news','tools'].forEach(t=>document.getElementById('tab-'+t).style.display=t===id?'block':'none');document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));btn.classList.add('active');if(id==='analytics')renderAnalytics();if(id==='news')loadNews();}
-function stats(){
- const done=trades.filter(t=>t.outcome!=='Not Taken');
- const wins=done.filter(t=>parseFloat(t.r)>0);
- const net=done.reduce((s,t)=>s+parseFloat(t.r||0),0);
- let streak=0,dir=0;for(let i=trades.length-1;i>=0;i--){const r=parseFloat(trades[i].r||0);if(r===0)continue;const d=r>0?1:-1;if(dir===0)dir=d;if(d!==dir)break;streak++;}
- const pos=done.filter(t=>parseFloat(t.r)>0).reduce((s,t)=>s+parseFloat(t.r),0),neg=Math.abs(done.filter(t=>parseFloat(t.r)<0).reduce((s,t)=>s+parseFloat(t.r),0));
- const pf=neg? (pos/neg).toFixed(2):'—';const exp=done.length?(net/done.length).toFixed(2):'0';
- let peak=0,dd=0,run=0;done.forEach(t=>{run+=parseFloat(t.r);peak=Math.max(peak,run);dd=Math.max(dd,peak-run);});
- return {trades:trades.length,win:done.length?Math.round(wins.length/done.length*100):0,net:net.toFixed(2),streak:streak?((dir>0?'W':'L')+streak):'—',pf,exp,dd:dd.toFixed(2),avg:exp};
-}
-function render(){
- const s=stats();
- document.getElementById('stats').innerHTML=[['TRADES',s.trades],['WIN RATE',s.win+'%'],['NET R',s.net],['STREAK',s.streak],['PROFIT FACTOR',s.pf],['EXPECTANCY',s.exp+'R'],['MAX DD',s.dd+'R'],['AVG R',s.avg+'R']].map(x=>`<div class="card"><span>${x[0]}</span><b>${x[1]}</b></div>`).join('');
- const q=(document.getElementById('q').value||'').toLowerCase(),qs=document.getElementById('qSession').value;
- const rows=trades.map((t,i)=>({...t,i})).reverse().filter(t=>(!qs||t.session===qs)&&(!q||JSON.stringify(t).toLowerCase().includes(q)));
- document.getElementById('history').innerHTML=rows.map(t=>`<tr><td>${t.date}</td><td>${t.pair}<br><span class="small">${t.session}</span></td><td>${t.dir}<br><span class="small">${t.level} ${t.tf||''}</span></td><td>${t.risk}%<br><b class="${parseFloat(t.r)>=0?'win':'loss'}">${t.r}R</b></td><td>${t.outcome}</td><td>${t.lesson||''}<br><span class="small">${t.desc||''}</span></td><td><button class="btn" onclick="delTrade(${t.i})">Delete</button></td></tr>`).join('')||'<tr><td colspan="7">No entries yet. Add your first entry above.</td></tr>';
- calc();challenge();
-}
-function delTrade(i){if(confirm('Delete this entry?')){trades.splice(i,1);save();render();}}
-document.getElementById('entryForm').addEventListener('submit',e=>{e.preventDefault();
- const t={date:document.getElementById('fDate').value||new Date().toISOString().slice(0,10),pair:fPair.value,session:fSession.value,dir:fDir.value,tf:fTf.value,level:fLevel.value,module:fModule.value,risk:fRisk.value,sl:fSl.value,r:parseFloat(fR.value),outcome:fOut.value,lesson:fLesson.value,desc:fDesc.value,checklist:['c1','c2','c3','c4'].filter(id=>document.getElementById(id).checked)};
- trades.push(t);save();render();e.target.reset();alert('Entry saved.');});
-function backup(){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(trades,null,2)],{type:'application/json'}));a.download='trade-journal-backup.json';a.click();}
-function restore(f){if(!f)return;const r=new FileReader();r.onload=()=>{try{trades=JSON.parse(r.result);save();render();alert('Restored.');}catch{alert('Invalid backup file.');}};r.readAsText(f);}
-function exportCsv(){const rows=[['date','pair','session','direction','level','risk','r','outcome','lesson']];trades.forEach(t=>rows.push([t.date,t.pair,t.session,t.dir,t.level,t.risk,t.r,t.outcome,(t.lesson||'').replace(/,/g,' ')]));const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([rows.map(r=>r.join(',')).join('\n')],{type:'text/csv'}));a.download='trade-journal.csv';a.click();}
-function breakdown(key){const m={};trades.forEach(t=>{const k=t[key]||'—';m[k]=m[k]||{n:0,w:0,net:0};m[k].n++;if(parseFloat(t.r)>0)m[k].w++;m[k].net+=parseFloat(t.r||0);});return Object.entries(m).map(([k,v])=>`<tr><td>${k}</td><td>${v.n}</td><td>${v.n?Math.round(v.w/v.n*100):0}%</td><td>${v.net.toFixed(2)}R</td></tr>`).join('');}
-function renderAnalytics(){
- const s=stats();document.getElementById('advStats').innerHTML=`Max drawdown: <b>${s.dd}R</b> • Expectancy: <b>${s.exp}R</b> • Profit factor: <b>${s.pf}</b> • Average R: <b>${s.avg}R</b>`;
- const c=document.getElementById('curve'),ctx=c.getContext('2d');ctx.clearRect(0,0,1000,280);ctx.strokeStyle='#33456e';ctx.beginPath();ctx.moveTo(0,140);ctx.lineTo(1000,140);ctx.stroke();
- let run=0,pts=[[0,140]];trades.forEach((t,i)=>{run+=parseFloat(t.r||0);pts.push([(i+1)/Math.max(1,trades.length)*980,140-run*20]);});
- ctx.strokeStyle='#f5b301';ctx.lineWidth=2;ctx.beginPath();pts.forEach((p,i)=>i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]));ctx.stroke();
- const now=new Date(),ym=now.toISOString().slice(0,7),days={};trades.forEach(t=>{if(t.date.startsWith(ym))days[t.date]=(days[t.date]||0)+parseFloat(t.r||0);});
- let html='';const dim=new Date(now.getFullYear(),now.getMonth()+1,0).getDate();for(let d=1;d<=dim;d++){const k=ym+'-'+String(d).padStart(2,'0'),v=days[k]||0;html+=`<span class="day ${v>0?'pos':v<0?'neg':''}" title="${k}: ${v.toFixed(2)}R">${d}</span>`;}
- document.getElementById('heatmap').innerHTML=html||'No trades this month yet.';
- document.getElementById('breakdowns').innerHTML=`<h3>By pair</h3><table><tr><th>Pair</th><th>Trades</th><th>Win %</th><th>Net R</th></tr>${breakdown('pair')}</table><h3>By session</h3><table><tr><th>Session</th><th>Trades</th><th>Win %</th><th>Net R</th></tr>${breakdown('session')}</table><h3>By level</h3><table><tr><th>Level</th><th>Trades</th><th>Win %</th><th>Net R</th></tr>${breakdown('level')}</table>`;
- const counts={};trades.forEach(t=>{if(t.lesson)counts[t.lesson]=(counts[t.lesson]||0)+1;});
- document.getElementById('mistakes').innerHTML=Object.entries(counts).filter(x=>x[1]>1).map(x=>`<p>${x[0]} — <b>${x[1]} times</b></p>`).join('')||'<p class="small">No repeated lesson yet.</p>';
-}
-function calc(){const a=parseFloat(acc.value||0),r=parseFloat(riskPct.value||0),sl=parseFloat(slPips.value||0);const amt=a*r/100;document.getElementById('calcOut').innerHTML=`Risk amount: <b>$${amt.toFixed(2)}</b> • Size per pip: <b>$${sl?(amt/sl).toFixed(2):'—'}</b>`;}
-function challenge(){const st=parseFloat(chStart.value||0),tg=parseFloat(chTarget.value||0),dd=parseFloat(chTotal.value||0);let bal=st;trades.forEach(t=>{bal*=1+(parseFloat(t.risk||0)*parseFloat(t.r||0)/100);});const target=st*(1+tg/100),ddAmt=st*dd/100;document.getElementById('chOut').innerHTML=`Estimated balance: <b>$${bal.toFixed(2)}</b> • Target: <b>$${target.toFixed(2)}</b> • Total DD limit amount: <b>$${ddAmt.toFixed(2)}</b> • Remaining to target: <b>$${Math.max(0,target-bal).toFixed(2)}</b>`;}
-async function sha(s){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('');}
-async function setPin(){const p=pinSet.value;if(!p)return alert('Enter a PIN first.');localStorage.setItem('ritik_pin_hash',await sha(p));alert('PIN set in this browser.');}
-function lockNow(){if(localStorage.getItem('ritik_pin_hash'))document.getElementById('lockScreen').style.display='block';else alert('Set a PIN first.');}
-async function unlock(){if(await sha(pinIn.value)===localStorage.getItem('ritik_pin_hash'))document.getElementById('lockScreen').style.display='none';else alert('Wrong PIN.');}
-if(localStorage.getItem('ritik_pin_hash'))document.getElementById('lockScreen').style.display='block';
-async function loadNews(){
- const box=document.getElementById('news');box.textContent='Loading…';
- try{
-  const res=await fetch('https://nfs.faireconomy.media/ff_calendar_thisweek.json');if(!res.ok)throw new Error('feed failed');
-  let ev=await res.json();
-  ev=ev.filter(e=>['USD','EUR','GBP'].includes(e.currency));
-  if(document.getElementById('highOnly').checked)ev=ev.filter(e=>e.impact==='High');
-  ev.sort((a,b)=>new Date(a.date)-new Date(b.date));
-  const now=new Date();
-  box.innerHTML=ev.map(e=>{const d=new Date(new Date(e.date).getTime()+5.5*3600*1000);const past=d<now;return `<p><b>${d.toLocaleString('en-IN',{timeZone:'Asia/Kolkata'})}</b> • ${e.currency} • ${e.impact} • ${e.title} • Forecast: ${e.forecast||'—'} • Previous: ${e.previous||'—'} ${past?'<span class="small">(past)</span>':''}</p>`;}).join('')||'<p>No events match this filter this week. Note: this week\'s major USD/EUR/GBP events may already be past.</p>';
- }catch(err){box.innerHTML='<p>Live calendar feed could not be loaded in this browser. Open the source link above for the current calendar. No events have been invented here.</p>';}
-}
-function reminders(){
- const now=new Date(new Date().toLocaleString('en-US',{timeZone:'Asia/Kolkata'}));
- function nextAt(h,m){const d=new Date(now);d.setHours(h,m,0,0);if(d<=now)d.setDate(d.getDate()+1);return d;}
- function fmt(ms){const h=Math.floor(ms/3600000),m=Math.floor(ms%3600000/60000);return h+'h '+m+'m';}
- document.getElementById('reminders').innerHTML=`London open (1:30 PM IST) in <b>${fmt(nextAt(13,30)-now)}</b> • New York open (6:30 PM IST, from 2 Nov) in <b>${fmt(nextAt(18,30)-now)}</b> • Asia open (5:30 AM IST) in <b>${fmt(nextAt(5,30)-now)}</b>`;
-}
-setInterval(reminders,60000);reminders();render();
-</script></body></html>
+<div id="lockScreen" style="display:none;position:fixed;inset:0;background:#0b0f1a;z-index:99;text-align:center;padding-top:30vh"><h2>Trade Journal locked</h2><p>Enter PIN</p><input type="password" id="pinIn" style="max-width:240px"><br><br><button class="btn primary" onclick="unlock()">Unlock</button></div>
+<script src="app.js"></script>
+</body></html>
