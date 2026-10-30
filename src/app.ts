@@ -192,7 +192,7 @@ async function loadNews(force = false): Promise<void> {
   let raw: unknown = null, lastErr = "";
   const results = await Promise.allSettled(urls.map((u) => fetchJson(u)));
   for (const r of results) { if (r.status === "fulfilled" && Array.isArray(r.value)) { raw = r.value; break; } else if (r.status === "rejected") lastErr = String(r.reason); }
-  if (!Array.isArray(raw)) { box.innerHTML = `<p>Live calendar feed could not be loaded in this browser (${esc(lastErr)}). Upar TradingView widget se live calendar dekho, aur neeche Manual News Checker se kisi bhi event ka asar check karo. No events have been invented here.</p>`; $("aiNews").innerHTML = "<p>Feed load nahi hui, isliye auto-analysis khaali hai. Upar TradingView calendar dekho, ya Manual News Checker me event type aur actual vs forecast chuno, wahan Gold aur pairs ka asar milega.</p>"; return; }
+  if (!Array.isArray(raw)) { const friendly = lastErr.includes("SyntaxError") ? "Proxy ne JSON ki jagah HTML / rate-limit page diya, isliye feed parse nahi hui." : "Feed source browser se block hai ya proxy slow/down hai."; box.innerHTML = `<p>Live calendar feed could not be loaded in this browser. ${friendly} Upar TradingView widget se live calendar dekho, aur neeche Manual News Checker se kisi bhi event ka asar check karo. No events have been invented here.</p>`; $("aiNews").innerHTML = "<p>Feed load nahi hui, isliye auto-analysis khaali hai. Upar TradingView calendar dekho, ya Manual News Checker me event type aur actual vs forecast chuno, wahan Gold aur pairs ka asar milega.</p>"; return; }
   try { localStorage.setItem("ritik_news_cache", JSON.stringify({ at: Date.now(), events: raw })); } catch { /* cache optional */ }
   renderNewsEvents(raw as Record<string, unknown>[]);
 }
