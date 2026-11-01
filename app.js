@@ -361,7 +361,7 @@ async function loadNews(force = false) {
             }
             catch { /* cache optional */ }
             renderNewsEvents(snap);
-            box.insertAdjacentHTML("afterbegin", "<p class=\"small\">Note: ye list is hafte ka saved snapshot hai (26 Oct – 1 Nov 2026), kyunki Forex Factory ka live feed browser se CORS ki wajah se block hai. Live calendar upar TradingView widget me chal raha hai.</p>");
+            box.insertAdjacentHTML("afterbegin", "<p class=\"small\">Note: ye list is hafte ka saved snapshot hai (2 – 8 Nov 2026), kyunki Forex Factory ka live feed browser se CORS ki wajah se block hai. Live calendar upar TradingView widget me chal raha hai.</p>");
             return;
         }
     }
